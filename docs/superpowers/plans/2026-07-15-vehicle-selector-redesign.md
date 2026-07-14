@@ -1281,7 +1281,7 @@ Expected: no output. (This also confirms nothing still imports the deleted `vehi
 - [ ] **Step 6: Commit**
 
 ```bash
-git add -A src/app/[locale]/page.tsx src/messages/bg.json src/messages/en.json
+git add -A src/components/vehicle-picker src/app/[locale]/page.tsx src/messages/bg.json src/messages/en.json
 git commit -m "feat: wire landing page to VehicleSelector, remove old dropdown picker"
 ```
 
