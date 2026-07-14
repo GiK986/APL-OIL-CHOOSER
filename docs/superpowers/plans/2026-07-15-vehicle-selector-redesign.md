@@ -446,16 +446,6 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
     `/api/olyslager/makes?categoryId=${categoryId}`,
   );
 
-  if (loading || !data) {
-    return (
-      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
-        {Array.from({ length: 16 }).map((_, i) => (
-          <Skeleton key={i} className="h-20 w-full" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Alert variant="destructive">
@@ -466,6 +456,16 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
           </Button>
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
+        {Array.from({ length: 16 }).map((_, i) => (
+          <Skeleton key={i} className="h-20 w-full" />
+        ))}
+      </div>
     );
   }
 
@@ -549,16 +549,6 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
     `/api/olyslager/models?makeId=${makeId}`,
   );
 
-  if (loading || !data) {
-    return (
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <Skeleton key={i} className="h-32 w-full" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Alert variant="destructive">
@@ -569,6 +559,16 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
           </Button>
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <Skeleton key={i} className="h-32 w-full" />
+        ))}
+      </div>
     );
   }
 
@@ -783,16 +783,6 @@ export function TypeTable({ modelId }: TypeTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>("typeName");
   const [sortAsc, setSortAsc] = useState(true);
 
-  if (loading || !data) {
-    return (
-      <div className="flex flex-col gap-2">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 w-full" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Alert variant="destructive">
@@ -803,6 +793,16 @@ export function TypeTable({ modelId }: TypeTableProps) {
           </Button>
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className="h-10 w-full" />
+        ))}
+      </div>
     );
   }
 
@@ -999,13 +999,7 @@ export function VehicleSelector() {
       </div>
 
       {step === "category" &&
-        (loading || !categories ? (
-          <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full" />
-            ))}
-          </div>
-        ) : error ? (
+        (error ? (
           <Alert variant="destructive">
             <AlertDescription className="flex items-center justify-between gap-2">
               <span>{tc("error")}</span>
@@ -1014,6 +1008,12 @@ export function VehicleSelector() {
               </Button>
             </AlertDescription>
           </Alert>
+        ) : loading || !categories ? (
+          <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="h-24 w-full" />
+            ))}
+          </div>
         ) : (
           <CategoryGrid categories={categories} onSelect={selectCategory} />
         ))}
