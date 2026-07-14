@@ -212,7 +212,7 @@ git commit -m "feat: map Olyslager category ids to lucide icons"
 ```ts
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { deriveStep } from "./derive-step";
+import { deriveStep } from "./derive-step.ts";
 
 test("shows category grid when nothing selected", () => {
   assert.equal(
