@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { X, type LucideIcon } from "lucide-react";
 
 interface BreadcrumbChipProps {
@@ -11,6 +12,7 @@ interface BreadcrumbChipProps {
 }
 
 export function BreadcrumbChip({ label, onClear, icon: Icon, imageUrl }: BreadcrumbChipProps) {
+  const t = useTranslations("Common");
   return (
     <div className="flex items-center gap-2 rounded-[3px] border border-border bg-card px-3 py-1.5 text-sm">
       {imageUrl ? (
@@ -22,7 +24,7 @@ export function BreadcrumbChip({ label, onClear, icon: Icon, imageUrl }: Breadcr
       <button
         type="button"
         onClick={onClear}
-        aria-label={`Remove ${label}`}
+        aria-label={t("removeLabel", { label })}
         className="text-muted-foreground hover:text-foreground"
       >
         <X className="size-3.5" />

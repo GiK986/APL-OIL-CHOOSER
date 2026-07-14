@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { useRouter } from "@/i18n/navigation";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
 import {
@@ -83,18 +84,42 @@ export function TypeTable({ modelId }: TypeTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="cursor-pointer" onClick={() => toggleSort("typeName")}>
-            {t("typeLabel")}
+          <TableHead
+            aria-sort={sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined}
+          >
+            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("typeName")}>
+              {t("typeLabel")}
+              {sortKey === "typeName" &&
+                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
+            </button>
           </TableHead>
           <TableHead>{t("fuelColumn")}</TableHead>
-          <TableHead className="cursor-pointer" onClick={() => toggleSort("yearStart")}>
-            {t("yearsColumn")}
+          <TableHead
+            aria-sort={sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined}
+          >
+            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("yearStart")}>
+              {t("yearsColumn")}
+              {sortKey === "yearStart" &&
+                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
+            </button>
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => toggleSort("powerHP")}>
-            {t("powerColumn")}
+          <TableHead
+            aria-sort={sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined}
+          >
+            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("powerHP")}>
+              {t("powerColumn")}
+              {sortKey === "powerHP" &&
+                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
+            </button>
           </TableHead>
-          <TableHead className="cursor-pointer" onClick={() => toggleSort("cylinderCC")}>
-            {t("capacityColumn")}
+          <TableHead
+            aria-sort={sortKey === "cylinderCC" ? (sortAsc ? "ascending" : "descending") : undefined}
+          >
+            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("cylinderCC")}>
+              {t("capacityColumn")}
+              {sortKey === "cylinderCC" &&
+                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
+            </button>
           </TableHead>
           <TableHead>{t("cylindersColumn")}</TableHead>
           <TableHead />
