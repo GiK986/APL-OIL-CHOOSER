@@ -19,7 +19,12 @@
     "viewRecommendations": "View recommendations",
     "emptyMakes": "No makes found for this category",
     "emptyModels": "No models found for this make",
-    "emptyTypes": "No engine types found for this model"
+    "emptyTypes": "No engine types found for this model",
+    "fuelColumn": "Fuel",
+    "yearsColumn": "Years",
+    "powerColumn": "Power",
+    "capacityColumn": "Capacity",
+    "cylindersColumn": "Cylinders"
   },
   "Search": {
     "placeholder": "Search by model, e.g. A6 2.0 130",

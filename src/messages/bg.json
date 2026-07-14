@@ -19,7 +19,12 @@
     "viewRecommendations": "Виж препоръки",
     "emptyMakes": "Няма намерени марки за тази категория",
     "emptyModels": "Няма намерени модели за тази марка",
-    "emptyTypes": "Няма намерени варианти за този модел"
+    "emptyTypes": "Няма намерени варианти за този модел",
+    "fuelColumn": "Гориво",
+    "yearsColumn": "Години",
+    "powerColumn": "Мощност",
+    "capacityColumn": "Обем",
+    "cylindersColumn": "Цилиндри"
   },
   "Search": {
     "placeholder": "Търсене по модел, напр. A6 2.0 130",
