@@ -1,0 +1,45 @@
+{
+  "Nav": {
+    "title": "APL Избор на масло"
+  },
+  "Landing": {
+    "headline": "Намерете правилното масло за вашия автомобил",
+    "subcopy": "Изберете категория, марка, модел и двигател или потърсете директно по модел.",
+    "orBrowseByCategory": "или разгледайте по категория"
+  },
+  "VehiclePicker": {
+    "categoryLabel": "Категория",
+    "categoryPlaceholder": "Изберете категория",
+    "makeLabel": "Марка",
+    "makePlaceholder": "Изберете марка",
+    "modelLabel": "Модел",
+    "modelPlaceholder": "Изберете модел",
+    "typeLabel": "Двигател",
+    "typePlaceholder": "Изберете двигател",
+    "viewRecommendations": "Виж препоръки",
+    "emptyMakes": "Няма намерени марки за тази категория",
+    "emptyModels": "Няма намерени модели за тази марка",
+    "emptyTypes": "Няма намерени варианти за този модел"
+  },
+  "Search": {
+    "placeholder": "Търсене по модел, напр. A6 2.0 130",
+    "noResults": "Няма намерени резултати — опитайте друго търсене"
+  },
+  "Results": {
+    "recommendedProducts": "Препоръчани продукти",
+    "capacities": "Капацитети",
+    "changeInterval": "Интервал на смяна",
+    "productColumn": "Продукт",
+    "codeColumn": "Код",
+    "useColumn": "Приложение",
+    "noComponents": "Няма налични препоръки за това превозно средство",
+    "dataLanguageNote": "Данните за автомобила и продуктите са налични само на английски език.",
+    "backToPicker": "Обратно към избора"
+  },
+  "Common": {
+    "loading": "Зареждане...",
+    "error": "Възникна грешка",
+    "retry": "Опитай отново",
+    "notFound": "Страницата не е намерена"
+  }
+}

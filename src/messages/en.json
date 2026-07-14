@@ -1,0 +1,45 @@
+{
+  "Nav": {
+    "title": "APL Oil Chooser"
+  },
+  "Landing": {
+    "headline": "Find the right oil for your vehicle",
+    "subcopy": "Pick a category, make, model and engine type, or search directly by model.",
+    "orBrowseByCategory": "or browse by category"
+  },
+  "VehiclePicker": {
+    "categoryLabel": "Category",
+    "categoryPlaceholder": "Select a category",
+    "makeLabel": "Make",
+    "makePlaceholder": "Select a make",
+    "modelLabel": "Model",
+    "modelPlaceholder": "Select a model",
+    "typeLabel": "Engine type",
+    "typePlaceholder": "Select an engine type",
+    "viewRecommendations": "View recommendations",
+    "emptyMakes": "No makes found for this category",
+    "emptyModels": "No models found for this make",
+    "emptyTypes": "No engine types found for this model"
+  },
+  "Search": {
+    "placeholder": "Search by model, e.g. A6 2.0 130",
+    "noResults": "No matches — try a different search"
+  },
+  "Results": {
+    "recommendedProducts": "Recommended products",
+    "capacities": "Capacities",
+    "changeInterval": "Change interval",
+    "productColumn": "Product",
+    "codeColumn": "Code",
+    "useColumn": "Use",
+    "noComponents": "No recommendations available for this vehicle",
+    "dataLanguageNote": "Vehicle and product data is provided in English.",
+    "backToPicker": "Back to picker"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "notFound": "Page not found"
+  }
+}
