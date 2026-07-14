@@ -1,6 +1,5 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { VehiclePicker } from "@/components/vehicle-picker/vehicle-picker";
-import { SearchBox } from "@/components/search/search-box";
+import { VehicleSelector } from "@/components/vehicle-selector/vehicle-selector";
 
 export default async function HomePage({
   params,
@@ -17,12 +16,8 @@ export default async function HomePage({
         <h1 className="text-3xl font-semibold tracking-tight">{t("headline")}</h1>
         <p className="mt-3 text-muted-foreground">{t("subcopy")}</p>
       </div>
-      <div className="mt-10 w-full max-w-md">
-        <SearchBox />
-        <p className="mt-6 mb-4 text-center text-sm text-muted-foreground">
-          {t("orBrowseByCategory")}
-        </p>
-        <VehiclePicker />
+      <div className="mt-10 w-full max-w-5xl">
+        <VehicleSelector />
       </div>
     </main>
   );

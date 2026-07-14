@@ -4,8 +4,7 @@
   },
   "Landing": {
     "headline": "Find the right oil for your vehicle",
-    "subcopy": "Pick a category, make, model and engine type, or search directly by model.",
-    "orBrowseByCategory": "or browse by category"
+    "subcopy": "Pick a category, make, model and engine type, or search directly by model."
   },
   "VehiclePicker": {
     "categoryLabel": "Category",
