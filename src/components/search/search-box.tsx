@@ -42,17 +42,21 @@ export function SearchBox() {
   }, [debouncedQuery]);
 
   return (
-    <div className="w-full">
+    <div className="relative w-full">
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder={t("placeholder")}
       />
       {debouncedQuery && loading && (
-        <p className="mt-3 text-center text-sm text-muted-foreground">…</p>
+        <p className="absolute z-10 mt-1 w-full rounded-[3px] border border-border bg-card p-3 text-center text-sm text-muted-foreground shadow-md">
+          …
+        </p>
       )}
       {debouncedQuery && !loading && (
-        <SearchResultsList results={results} />
+        <div className="absolute z-10 mt-1 max-h-96 w-full overflow-y-auto rounded-[3px] border border-border bg-card shadow-md">
+          <SearchResultsList results={results} />
+        </div>
       )}
     </div>
   );
