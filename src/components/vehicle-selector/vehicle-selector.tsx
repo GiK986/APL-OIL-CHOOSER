@@ -33,6 +33,7 @@ export function VehicleSelector() {
     if (categories && !category && !showCategoryGrid) {
       const defaultCategory =
         categories.find((c) => c.id === DEFAULT_CATEGORY_ID) ?? categories[0];
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing local selection state to the fetched categories list once they arrive, same pattern as the fetch-on-dependency-change effects elsewhere in this codebase
       if (defaultCategory) setCategory(defaultCategory);
     }
   }, [categories, category, showCategoryGrid]);
