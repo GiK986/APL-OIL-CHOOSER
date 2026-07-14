@@ -33,16 +33,6 @@ export function TypeTable({ modelId }: TypeTableProps) {
   const [sortKey, setSortKey] = useState<SortKey>("typeName");
   const [sortAsc, setSortAsc] = useState(true);
 
-  if (loading || !data) {
-    return (
-      <div className="flex flex-col gap-2">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <Skeleton key={i} className="h-10 w-full" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Alert variant="destructive">
@@ -53,6 +43,16 @@ export function TypeTable({ modelId }: TypeTableProps) {
           </Button>
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <div className="flex flex-col gap-2">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className="h-10 w-full" />
+        ))}
+      </div>
     );
   }
 

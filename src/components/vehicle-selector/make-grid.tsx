@@ -20,16 +20,6 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
     `/api/olyslager/makes?categoryId=${categoryId}`,
   );
 
-  if (loading || !data) {
-    return (
-      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
-        {Array.from({ length: 16 }).map((_, i) => (
-          <Skeleton key={i} className="h-20 w-full" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Alert variant="destructive">
@@ -40,6 +30,16 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
           </Button>
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
+        {Array.from({ length: 16 }).map((_, i) => (
+          <Skeleton key={i} className="h-20 w-full" />
+        ))}
+      </div>
     );
   }
 

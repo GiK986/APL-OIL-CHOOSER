@@ -20,16 +20,6 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
     `/api/olyslager/models?makeId=${makeId}`,
   );
 
-  if (loading || !data) {
-    return (
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <Skeleton key={i} className="h-32 w-full" />
-        ))}
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <Alert variant="destructive">
@@ -40,6 +30,16 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
           </Button>
         </AlertDescription>
       </Alert>
+    );
+  }
+
+  if (loading || !data) {
+    return (
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <Skeleton key={i} className="h-32 w-full" />
+        ))}
+      </div>
     );
   }
 
