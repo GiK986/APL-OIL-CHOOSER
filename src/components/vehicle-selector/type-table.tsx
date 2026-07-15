@@ -133,115 +133,113 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
             </Button>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead
-                    aria-sort={
-                      sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined
-                    }
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead
+                  aria-sort={
+                    sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("typeName")}
                   >
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1"
-                      onClick={() => toggleSort("typeName")}
-                    >
-                      {t("typeLabel")}
-                      {sortKey === "typeName" &&
-                        (sortAsc ? (
-                          <ChevronUp className="size-3.5" />
-                        ) : (
-                          <ChevronDown className="size-3.5" />
-                        ))}
-                    </button>
-                  </TableHead>
-                  <TableHead>{t("fuelColumn")}</TableHead>
-                  <TableHead
-                    aria-sort={
-                      sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined
-                    }
+                    {t("typeLabel")}
+                    {sortKey === "typeName" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead>{t("fuelColumn")}</TableHead>
+                <TableHead
+                  aria-sort={
+                    sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("yearStart")}
                   >
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1"
-                      onClick={() => toggleSort("yearStart")}
-                    >
-                      {t("yearsColumn")}
-                      {sortKey === "yearStart" &&
-                        (sortAsc ? (
-                          <ChevronUp className="size-3.5" />
-                        ) : (
-                          <ChevronDown className="size-3.5" />
-                        ))}
-                    </button>
-                  </TableHead>
-                  <TableHead
-                    aria-sort={
-                      sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined
-                    }
+                    {t("yearsColumn")}
+                    {sortKey === "yearStart" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead
+                  aria-sort={
+                    sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("powerHP")}
                   >
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1"
-                      onClick={() => toggleSort("powerHP")}
-                    >
-                      {t("powerColumn")}
-                      {sortKey === "powerHP" &&
-                        (sortAsc ? (
-                          <ChevronUp className="size-3.5" />
-                        ) : (
-                          <ChevronDown className="size-3.5" />
-                        ))}
-                    </button>
-                  </TableHead>
-                  <TableHead
-                    aria-sort={
-                      sortKey === "cylinderCC" ? (sortAsc ? "ascending" : "descending") : undefined
-                    }
+                    {t("powerColumn")}
+                    {sortKey === "powerHP" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead
+                  aria-sort={
+                    sortKey === "cylinderCC" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("cylinderCC")}
                   >
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1"
-                      onClick={() => toggleSort("cylinderCC")}
-                    >
-                      {t("capacityColumn")}
-                      {sortKey === "cylinderCC" &&
-                        (sortAsc ? (
-                          <ChevronUp className="size-3.5" />
-                        ) : (
-                          <ChevronDown className="size-3.5" />
-                        ))}
-                    </button>
-                  </TableHead>
-                  <TableHead>{t("cylindersColumn")}</TableHead>
-                  <TableHead />
+                    {t("capacityColumn")}
+                    {sortKey === "cylinderCC" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead>{t("cylindersColumn")}</TableHead>
+                <TableHead />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sorted.map((type) => (
+                <TableRow key={type.id}>
+                  <TableCell className="font-medium">{type.typeName}</TableCell>
+                  <TableCell>{type.fuel ?? "—"}</TableCell>
+                  <TableCell>
+                    {type.yearStart}
+                    {type.yearEnd ? `–${type.yearEnd}` : "+"}
+                  </TableCell>
+                  <TableCell>
+                    {type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}
+                  </TableCell>
+                  <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
+                  <TableCell>{type.cylinderCount ?? "—"}</TableCell>
+                  <TableCell>
+                    <Button size="sm" onClick={() => onSelect(type)}>
+                      {t("viewRecommendations")}
+                    </Button>
+                  </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sorted.map((type) => (
-                  <TableRow key={type.id}>
-                    <TableCell className="font-medium">{type.typeName}</TableCell>
-                    <TableCell>{type.fuel ?? "—"}</TableCell>
-                    <TableCell>
-                      {type.yearStart}
-                      {type.yearEnd ? `–${type.yearEnd}` : "+"}
-                    </TableCell>
-                    <TableCell>
-                      {type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}
-                    </TableCell>
-                    <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
-                    <TableCell>{type.cylinderCount ?? "—"}</TableCell>
-                    <TableCell>
-                      <Button size="sm" onClick={() => onSelect(type)}>
-                        {t("viewRecommendations")}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+              ))}
+            </TableBody>
+          </Table>
         )
       }
       filters={
