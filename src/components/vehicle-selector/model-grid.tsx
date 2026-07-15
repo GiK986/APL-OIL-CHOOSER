@@ -1,11 +1,15 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
+import { matchesNameFilter } from "./name-filter";
+import { FilterableStepLayout } from "./filterable-step-layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import type { Model } from "@/lib/olyslager/types";
 
 interface ModelGridProps {
@@ -19,6 +23,7 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
   const { data, loading, error, retry } = useOlyslagerList<Model>(
     `/api/olyslager/models?makeId=${makeId}`,
   );
+  const [query, setQuery] = useState("");
 
   if (error) {
     return (
@@ -47,36 +52,64 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
     return <p className="text-sm text-muted-foreground">{t("emptyModels")}</p>;
   }
 
+  const filtered = data.filter((model) => matchesNameFilter(model.modelName, query));
+
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-      {data.map((model) => (
-        <button
-          key={model.id}
-          type="button"
-          onClick={() => onSelect(model)}
-          className="flex flex-col items-center gap-2 rounded-[3px] border border-border bg-card px-3 py-4 text-center transition-colors hover:border-primary"
-        >
-          {model.imageUrlMedium ? (
-            <Image
-              src={model.imageUrlMedium}
-              alt=""
-              width={120}
-              height={60}
-              className="h-[60px] w-[120px] object-contain"
-            />
-          ) : (
-            <div className="h-[60px] w-[120px]" />
-          )}
-          <span className="text-sm font-medium">
-            {model.modelName}
-            {model.code ? ` (${model.code})` : ""}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {model.yearStart}
-            {model.yearEnd ? `–${model.yearEnd}` : "+"}
-          </span>
-        </button>
-      ))}
-    </div>
+    <FilterableStepLayout
+      content={
+        filtered.length === 0 ? (
+          <div className="flex flex-col items-start gap-2">
+            <p className="text-sm text-muted-foreground">{t("noMatches")}</p>
+            <Button size="sm" variant="outline" onClick={() => setQuery("")}>
+              {t("clearFilter")}
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            {filtered.map((model) => (
+              <button
+                key={model.id}
+                type="button"
+                onClick={() => onSelect(model)}
+                className="flex flex-col items-center gap-2 rounded-[3px] border border-border bg-card px-3 py-4 text-center transition-colors hover:border-primary"
+              >
+                {model.imageUrlMedium ? (
+                  <Image
+                    src={model.imageUrlMedium}
+                    alt=""
+                    width={120}
+                    height={60}
+                    className="h-[60px] w-[120px] object-contain"
+                  />
+                ) : (
+                  <div className="h-[60px] w-[120px]" />
+                )}
+                <span className="text-sm font-medium">
+                  {model.modelName}
+                  {model.code ? ` (${model.code})` : ""}
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  {model.yearStart}
+                  {model.yearEnd ? `–${model.yearEnd}` : "+"}
+                </span>
+              </button>
+            ))}
+          </div>
+        )
+      }
+      filters={
+        <div className="flex flex-col gap-2 rounded-[3px] border border-border bg-card p-3">
+          <label className="text-xs font-medium text-muted-foreground" htmlFor="model-name-filter">
+            {t("filterByName")}
+          </label>
+          <Input
+            id="model-name-filter"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("filterByName")}
+          />
+        </div>
+      }
+    />
   );
 }
