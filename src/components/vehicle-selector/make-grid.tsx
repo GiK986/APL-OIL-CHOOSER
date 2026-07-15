@@ -41,7 +41,7 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
 
   if (loading || !data) {
     return (
-      <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 lg:grid-cols-8">
         {Array.from({ length: 16 }).map((_, i) => (
           <Skeleton key={i} className="h-20 w-full" />
         ))}
@@ -66,7 +66,7 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
             </Button>
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8">
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-6 lg:grid-cols-8">
             {filtered.map((make) => (
               <button
                 key={make.id}
