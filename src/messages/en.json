@@ -37,8 +37,7 @@
     "codeColumn": "Code",
     "useColumn": "Use",
     "noComponents": "No recommendations available for this vehicle",
-    "dataLanguageNote": "Vehicle and product data is provided in English.",
-    "backToPicker": "Back to picker"
+    "dataLanguageNote": "Vehicle and product data is provided in English."
   },
   "Common": {
     "loading": "Loading...",

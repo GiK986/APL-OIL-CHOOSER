@@ -67,7 +67,10 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
           ) : (
             <div className="h-[60px] w-[120px]" />
           )}
-          <span className="text-sm font-medium">{model.modelName}</span>
+          <span className="text-sm font-medium">
+            {model.modelName}
+            {model.code ? ` (${model.code})` : ""}
+          </span>
           <span className="text-xs text-muted-foreground">
             {model.yearStart}
             {model.yearEnd ? `–${model.yearEnd}` : "+"}

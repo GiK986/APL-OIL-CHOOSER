@@ -1,5 +1,7 @@
+import { Suspense } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { VehicleSelector } from "@/components/vehicle-selector/vehicle-selector";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function HomePage({
   params,
@@ -17,7 +19,17 @@ export default async function HomePage({
         <p className="mt-3 text-muted-foreground">{t("subcopy")}</p>
       </div>
       <div className="mt-10 w-full max-w-5xl">
-        <VehicleSelector />
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="h-24 w-full" />
+              ))}
+            </div>
+          }
+        >
+          <VehicleSelector />
+        </Suspense>
       </div>
     </main>
   );

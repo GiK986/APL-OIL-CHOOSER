@@ -64,6 +64,27 @@ const DATA_LANGUAGE = "en";
 const REFERENCE_DATA_REVALIDATE = 60 * 60 * 24; // 24h
 const RECOMMENDATION_REVALIDATE = 60 * 60; // 1h
 
+// Olyslager does not guarantee components/products/capacities/intervals are
+// returned in display order — each carries its own `appOrder` (or
+// `productAppOrder`) field that reflects the intended order instead.
+function sortRecommendation(rec: Recommendation): Recommendation {
+  return {
+    ...rec,
+    components: [...rec.components]
+      .sort((a, b) => a.appOrder - b.appOrder)
+      .map((component) => ({
+        ...component,
+        productRecommendations: [...component.productRecommendations]
+          .sort((a, b) => a.productAppOrder - b.productAppOrder)
+          .map((product) => ({
+            ...product,
+            intervals: [...product.intervals].sort((a, b) => a.appOrder - b.appOrder),
+          })),
+        capacities: [...component.capacities].sort((a, b) => a.appOrder - b.appOrder),
+      })),
+  };
+}
+
 export const olyslager = {
   getCategories: () =>
     olyFetch<Category[]>("categories", { language: DATA_LANGUAGE }, { revalidate: REFERENCE_DATA_REVALIDATE }),
@@ -94,7 +115,7 @@ export const olyslager = {
       `recommendations/${typeId}`,
       { language: DATA_LANGUAGE },
       { revalidate: RECOMMENDATION_REVALIDATE },
-    ),
+    ).then(sortRecommendation),
 
   search: (searchText: string, searchCount = 20, facetCount = 10) =>
     olyFetch<SearchResponse>(

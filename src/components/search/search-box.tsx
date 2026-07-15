@@ -5,9 +5,13 @@ import { useTranslations } from "next-intl";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { Input } from "@/components/ui/input";
 import { SearchResultsList } from "./search-results-list";
-import type { SearchResponse } from "@/lib/olyslager/types";
+import type { SearchResponse, SearchResult } from "@/lib/olyslager/types";
 
-export function SearchBox() {
+interface SearchBoxProps {
+  onSelectResult: (result: SearchResult) => void;
+}
+
+export function SearchBox({ onSelectResult }: SearchBoxProps) {
   const t = useTranslations("Search");
   const [query, setQuery] = useState("");
   const debouncedQuery = useDebouncedValue(query.trim(), 300);
@@ -41,6 +45,12 @@ export function SearchBox() {
     };
   }, [debouncedQuery]);
 
+  function handleSelect(result: SearchResult) {
+    setQuery("");
+    setResults([]);
+    onSelectResult(result);
+  }
+
   return (
     <div className="relative w-full">
       <Input
@@ -55,7 +65,7 @@ export function SearchBox() {
       )}
       {debouncedQuery && !loading && (
         <div className="absolute z-10 mt-1 max-h-96 w-full overflow-y-auto rounded-[3px] border border-border bg-card shadow-md">
-          <SearchResultsList results={results} />
+          <SearchResultsList results={results} onSelect={handleSelect} />
         </div>
       )}
     </div>

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { ChevronUp, ChevronDown } from "lucide-react";
-import { useRouter } from "@/i18n/navigation";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
 import {
   Table,
@@ -20,14 +19,14 @@ import type { VehicleType } from "@/lib/olyslager/types";
 
 interface TypeTableProps {
   modelId: number;
+  onSelect: (type: VehicleType) => void;
 }
 
 type SortKey = "typeName" | "yearStart" | "powerHP" | "cylinderCC";
 
-export function TypeTable({ modelId }: TypeTableProps) {
+export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   const t = useTranslations("VehiclePicker");
   const tc = useTranslations("Common");
-  const router = useRouter();
   const { data, loading, error, retry } = useOlyslagerList<VehicleType>(
     `/api/olyslager/types?modelId=${modelId}`,
   );
@@ -140,7 +139,7 @@ export function TypeTable({ modelId }: TypeTableProps) {
             <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
             <TableCell>{type.cylinderCount ?? "—"}</TableCell>
             <TableCell>
-              <Button size="sm" onClick={() => router.push(`/results/${type.id}`)}>
+              <Button size="sm" onClick={() => onSelect(type)}>
                 {t("viewRecommendations")}
               </Button>
             </TableCell>

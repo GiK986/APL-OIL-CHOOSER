@@ -56,20 +56,24 @@ export interface VehicleType {
 }
 
 export interface ProductInterval {
+  appOrder: number;
   intervalName: string;
   intervalType: string;
 }
 
 export interface ProductRecommendation {
+  productAppOrder: number;
   productName: string;
   productCode: string | null;
   temperatureName: string | null;
+  useAppOrder: number;
   useName: string | null;
   intervals: ProductInterval[];
   approvalClassifications: string[] | null;
 }
 
 export interface Capacity {
+  appOrder: number;
   item: string;
   value: number | string;
   unit: string;
@@ -78,6 +82,7 @@ export interface Capacity {
 
 export interface RecommendationComponent {
   id: number;
+  appOrder: number;
   componentName: string;
   componentCode: string | null;
   componentCategoryId: number | null;
