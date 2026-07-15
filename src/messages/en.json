@@ -29,8 +29,10 @@
     "clearFilters": "Clear filters",
     "fuelFilterLabel": "Fuel",
     "driveTypeFilterLabel": "Drive type",
-    "powerFromLabel": "Power from",
-    "powerToLabel": "Power to",
+    "powerHpLabel": "Power (HP)",
+    "powerKwLabel": "Power (kW)",
+    "powerFromLabel": "From",
+    "powerToLabel": "To",
     "noMatches": "No matches for the current filter"
   },
   "Search": {

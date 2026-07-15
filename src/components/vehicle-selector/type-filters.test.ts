@@ -52,22 +52,46 @@ test("matchesTypeFilters: driveType filter excludes a non-matching type", () => 
   assert.equal(matchesTypeFilters(makeType({ driveType: "AWD" }), filters), true);
 });
 
-test("matchesTypeFilters: power range excludes types outside the range", () => {
-  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerMin: 100, powerMax: 200 };
+test("matchesTypeFilters: powerHP range excludes types outside the range", () => {
+  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerHpMin: 100, powerHpMax: 200 };
   assert.equal(matchesTypeFilters(makeType({ powerHP: 90 }), filters), false);
   assert.equal(matchesTypeFilters(makeType({ powerHP: 250 }), filters), false);
   assert.equal(matchesTypeFilters(makeType({ powerHP: 150 }), filters), true);
 });
 
-test("matchesTypeFilters: an open-ended power range only checks the given bound", () => {
-  const minOnly: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerMin: 100 };
+test("matchesTypeFilters: an open-ended powerHP range only checks the given bound", () => {
+  const minOnly: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerHpMin: 100 };
   assert.equal(matchesTypeFilters(makeType({ powerHP: 500 }), minOnly), true);
   assert.equal(matchesTypeFilters(makeType({ powerHP: 50 }), minOnly), false);
 });
 
-test("matchesTypeFilters: a power range excludes types with no powerHP", () => {
-  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerMin: 100 };
+test("matchesTypeFilters: a powerHP range excludes types with no powerHP", () => {
+  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerHpMin: 100 };
   assert.equal(matchesTypeFilters(makeType({ powerHP: null }), filters), false);
+});
+
+test("matchesTypeFilters: powerKW range excludes types outside the range", () => {
+  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerKwMin: 80, powerKwMax: 150 };
+  assert.equal(matchesTypeFilters(makeType({ powerKW: 70 }), filters), false);
+  assert.equal(matchesTypeFilters(makeType({ powerKW: 180 }), filters), false);
+  assert.equal(matchesTypeFilters(makeType({ powerKW: 110 }), filters), true);
+});
+
+test("matchesTypeFilters: an open-ended powerKW range only checks the given bound", () => {
+  const minOnly: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerKwMin: 80 };
+  assert.equal(matchesTypeFilters(makeType({ powerKW: 300 }), minOnly), true);
+  assert.equal(matchesTypeFilters(makeType({ powerKW: 40 }), minOnly), false);
+});
+
+test("matchesTypeFilters: a powerKW range excludes types with no powerKW", () => {
+  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerKwMin: 80 };
+  assert.equal(matchesTypeFilters(makeType({ powerKW: null }), filters), false);
+});
+
+test("matchesTypeFilters: powerHP and powerKW ranges combine (AND)", () => {
+  const filters: TypeFilters = { ...EMPTY_TYPE_FILTERS, powerHpMin: 100, powerKwMin: 100 };
+  assert.equal(matchesTypeFilters(makeType({ powerHP: 150, powerKW: 80 }), filters), false);
+  assert.equal(matchesTypeFilters(makeType({ powerHP: 150, powerKW: 110 }), filters), true);
 });
 
 test("hasActiveTypeFilters: false for EMPTY_TYPE_FILTERS, true once any field is set", () => {

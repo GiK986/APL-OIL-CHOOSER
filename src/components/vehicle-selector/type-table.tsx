@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FilterableStepLayout } from "./filterable-step-layout";
+import { matchesNameFilter } from "./name-filter";
 import {
   EMPTY_TYPE_FILTERS,
   extractDistinctValues,
@@ -41,10 +42,13 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   );
   const [sortKey, setSortKey] = useState<SortKey>("typeName");
   const [sortAsc, setSortAsc] = useState(true);
+  const [typeNameQuery, setTypeNameQuery] = useState("");
   const [fuel, setFuel] = useState<string | null>(null);
   const [driveType, setDriveType] = useState<string | null>(null);
-  const [powerMinInput, setPowerMinInput] = useState("");
-  const [powerMaxInput, setPowerMaxInput] = useState("");
+  const [powerHpMinInput, setPowerHpMinInput] = useState("");
+  const [powerHpMaxInput, setPowerHpMaxInput] = useState("");
+  const [powerKwMinInput, setPowerKwMinInput] = useState("");
+  const [powerKwMaxInput, setPowerKwMaxInput] = useState("");
 
   if (error) {
     return (
@@ -83,23 +87,30 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   }
 
   function clearFilters() {
+    setTypeNameQuery("");
     setFuel(null);
     setDriveType(null);
-    setPowerMinInput("");
-    setPowerMaxInput("");
+    setPowerHpMinInput("");
+    setPowerHpMaxInput("");
+    setPowerKwMinInput("");
+    setPowerKwMaxInput("");
   }
 
   const filters: TypeFilters = {
     ...EMPTY_TYPE_FILTERS,
     fuel,
     driveType,
-    powerMin: powerMinInput.trim() === "" ? null : Number(powerMinInput),
-    powerMax: powerMaxInput.trim() === "" ? null : Number(powerMaxInput),
+    powerHpMin: powerHpMinInput.trim() === "" ? null : Number(powerHpMinInput),
+    powerHpMax: powerHpMaxInput.trim() === "" ? null : Number(powerHpMaxInput),
+    powerKwMin: powerKwMinInput.trim() === "" ? null : Number(powerKwMinInput),
+    powerKwMax: powerKwMaxInput.trim() === "" ? null : Number(powerKwMaxInput),
   };
   const fuelOptions = extractDistinctValues(data, "fuel");
   const driveTypeOptions = extractDistinctValues(data, "driveType");
-  const filteredTypes = data.filter((type) => matchesTypeFilters(type, filters));
-  const filtersActive = hasActiveTypeFilters(filters);
+  const filteredTypes = data.filter(
+    (type) => matchesNameFilter(type.typeName, typeNameQuery) && matchesTypeFilters(type, filters),
+  );
+  const filtersActive = hasActiveTypeFilters(filters) || typeNameQuery.trim() !== "";
 
   const sorted = [...filteredTypes].sort((a, b) => {
     const dir = sortAsc ? 1 : -1;
@@ -234,6 +245,17 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
       filters={
         <div className="flex flex-col gap-3 rounded-[3px] border border-border bg-card p-3">
           <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="type-name-filter">
+              {t("filterByName")}
+            </label>
+            <Input
+              id="type-name-filter"
+              value={typeNameQuery}
+              onChange={(e) => setTypeNameQuery(e.target.value)}
+              placeholder={t("filterByName")}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-muted-foreground" htmlFor="type-fuel-filter">
               {t("fuelFilterLabel")}
             </label>
@@ -273,23 +295,44 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
             </select>
           </div>
           <div className="flex flex-col gap-1">
-            <span className="text-xs font-medium text-muted-foreground">{t("powerColumn")}</span>
+            <span className="text-xs font-medium text-muted-foreground">{t("powerHpLabel")}</span>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
                 inputMode="numeric"
-                value={powerMinInput}
-                onChange={(e) => setPowerMinInput(e.target.value)}
+                value={powerHpMinInput}
+                onChange={(e) => setPowerHpMinInput(e.target.value)}
                 placeholder={t("powerFromLabel")}
-                aria-label={t("powerFromLabel")}
+                aria-label={`${t("powerHpLabel")} ${t("powerFromLabel")}`}
               />
               <Input
                 type="number"
                 inputMode="numeric"
-                value={powerMaxInput}
-                onChange={(e) => setPowerMaxInput(e.target.value)}
+                value={powerHpMaxInput}
+                onChange={(e) => setPowerHpMaxInput(e.target.value)}
                 placeholder={t("powerToLabel")}
-                aria-label={t("powerToLabel")}
+                aria-label={`${t("powerHpLabel")} ${t("powerToLabel")}`}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium text-muted-foreground">{t("powerKwLabel")}</span>
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                inputMode="numeric"
+                value={powerKwMinInput}
+                onChange={(e) => setPowerKwMinInput(e.target.value)}
+                placeholder={t("powerFromLabel")}
+                aria-label={`${t("powerKwLabel")} ${t("powerFromLabel")}`}
+              />
+              <Input
+                type="number"
+                inputMode="numeric"
+                value={powerKwMaxInput}
+                onChange={(e) => setPowerKwMaxInput(e.target.value)}
+                placeholder={t("powerToLabel")}
+                aria-label={`${t("powerKwLabel")} ${t("powerToLabel")}`}
               />
             </div>
           </div>

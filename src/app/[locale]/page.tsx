@@ -14,7 +14,7 @@ export default async function HomePage({
 
   return (
     <main className="flex flex-1 flex-col items-center px-6 py-16">
-      <div className="w-full max-w-2xl text-center">
+      <div className="w-full max-w-3xl text-center">
         <h1 className="text-3xl font-semibold tracking-tight">{t("headline")}</h1>
         <p className="mt-3 text-muted-foreground">{t("subcopy")}</p>
       </div>

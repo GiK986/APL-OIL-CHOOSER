@@ -3,15 +3,19 @@ import type { VehicleType } from "@/lib/olyslager/types";
 export interface TypeFilters {
   fuel: string | null;
   driveType: string | null;
-  powerMin: number | null;
-  powerMax: number | null;
+  powerHpMin: number | null;
+  powerHpMax: number | null;
+  powerKwMin: number | null;
+  powerKwMax: number | null;
 }
 
 export const EMPTY_TYPE_FILTERS: TypeFilters = {
   fuel: null,
   driveType: null,
-  powerMin: null,
-  powerMax: null,
+  powerHpMin: null,
+  powerHpMax: null,
+  powerKwMin: null,
+  powerKwMax: null,
 };
 
 export function extractDistinctValues(
@@ -29,10 +33,28 @@ export function extractDistinctValues(
 export function matchesTypeFilters(type: VehicleType, filters: TypeFilters): boolean {
   if (filters.fuel != null && type.fuel !== filters.fuel) return false;
   if (filters.driveType != null && type.driveType !== filters.driveType) return false;
-  if (filters.powerMin != null && (type.powerHP == null || type.powerHP < filters.powerMin)) {
+  if (
+    filters.powerHpMin != null &&
+    (type.powerHP == null || type.powerHP < filters.powerHpMin)
+  ) {
     return false;
   }
-  if (filters.powerMax != null && (type.powerHP == null || type.powerHP > filters.powerMax)) {
+  if (
+    filters.powerHpMax != null &&
+    (type.powerHP == null || type.powerHP > filters.powerHpMax)
+  ) {
+    return false;
+  }
+  if (
+    filters.powerKwMin != null &&
+    (type.powerKW == null || type.powerKW < filters.powerKwMin)
+  ) {
+    return false;
+  }
+  if (
+    filters.powerKwMax != null &&
+    (type.powerKW == null || type.powerKW > filters.powerKwMax)
+  ) {
     return false;
   }
   return true;
@@ -42,7 +64,9 @@ export function hasActiveTypeFilters(filters: TypeFilters): boolean {
   return (
     filters.fuel != null ||
     filters.driveType != null ||
-    filters.powerMin != null ||
-    filters.powerMax != null
+    filters.powerHpMin != null ||
+    filters.powerHpMax != null ||
+    filters.powerKwMin != null ||
+    filters.powerKwMax != null
   );
 }

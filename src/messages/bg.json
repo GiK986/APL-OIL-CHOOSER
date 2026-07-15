@@ -29,8 +29,10 @@
     "clearFilters": "Изчисти филтри",
     "fuelFilterLabel": "Гориво",
     "driveTypeFilterLabel": "Задвижване",
-    "powerFromLabel": "Мощност от",
-    "powerToLabel": "Мощност до",
+    "powerHpLabel": "Мощност (к.с.)",
+    "powerKwLabel": "Мощност (kW)",
+    "powerFromLabel": "От",
+    "powerToLabel": "До",
     "noMatches": "Няма съвпадения с текущия филтър"
   },
   "Search": {
