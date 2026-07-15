@@ -33,7 +33,8 @@
     "powerKwLabel": "Мощност (kW)",
     "powerFromLabel": "От",
     "powerToLabel": "До",
-    "noMatches": "Няма съвпадения с текущия филтър"
+    "noMatches": "Няма съвпадения с текущия филтър",
+    "filtersButtonLabel": "Филтри"
   },
   "Search": {
     "placeholder": "Търсене по модел, напр. A6 2.0 130",
@@ -56,6 +57,7 @@
     "retry": "Опитай отново",
     "notFound": "Страницата не е намерена",
     "removeLabel": "Премахни {label}",
-    "allOption": "Всички"
+    "allOption": "Всички",
+    "closeLabel": "Затвори"
   }
 }

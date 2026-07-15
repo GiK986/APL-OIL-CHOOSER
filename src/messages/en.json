@@ -33,7 +33,8 @@
     "powerKwLabel": "Power (kW)",
     "powerFromLabel": "From",
     "powerToLabel": "To",
-    "noMatches": "No matches for the current filter"
+    "noMatches": "No matches for the current filter",
+    "filtersButtonLabel": "Filters"
   },
   "Search": {
     "placeholder": "Search by model, e.g. A6 2.0 130",
@@ -56,6 +57,7 @@
     "retry": "Retry",
     "notFound": "Page not found",
     "removeLabel": "Remove {label}",
-    "allOption": "All"
+    "allOption": "All",
+    "closeLabel": "Close"
   }
 }
