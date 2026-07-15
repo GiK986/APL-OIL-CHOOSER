@@ -23,7 +23,15 @@
     "yearsColumn": "Years",
     "powerColumn": "Power",
     "capacityColumn": "Capacity",
-    "cylindersColumn": "Cylinders"
+    "cylindersColumn": "Cylinders",
+    "filterByName": "Search by name",
+    "clearFilter": "Clear filter",
+    "clearFilters": "Clear filters",
+    "fuelFilterLabel": "Fuel",
+    "driveTypeFilterLabel": "Drive type",
+    "powerFromLabel": "Power from",
+    "powerToLabel": "Power to",
+    "noMatches": "No matches for the current filter"
   },
   "Search": {
     "placeholder": "Search by model, e.g. A6 2.0 130",
@@ -37,13 +45,15 @@
     "codeColumn": "Code",
     "useColumn": "Use",
     "noComponents": "No recommendations available for this vehicle",
-    "dataLanguageNote": "Vehicle and product data is provided in English."
+    "dataLanguageNote": "Vehicle and product data is provided in English.",
+    "useFilterLabel": "Use"
   },
   "Common": {
     "loading": "Loading...",
     "error": "Something went wrong",
     "retry": "Retry",
     "notFound": "Page not found",
-    "removeLabel": "Remove {label}"
+    "removeLabel": "Remove {label}",
+    "allOption": "All"
   }
 }

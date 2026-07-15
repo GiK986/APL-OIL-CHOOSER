@@ -23,7 +23,15 @@
     "yearsColumn": "Години",
     "powerColumn": "Мощност",
     "capacityColumn": "Обем",
-    "cylindersColumn": "Цилиндри"
+    "cylindersColumn": "Цилиндри",
+    "filterByName": "Търсене по име",
+    "clearFilter": "Изчисти филтър",
+    "clearFilters": "Изчисти филтри",
+    "fuelFilterLabel": "Гориво",
+    "driveTypeFilterLabel": "Задвижване",
+    "powerFromLabel": "Мощност от",
+    "powerToLabel": "Мощност до",
+    "noMatches": "Няма съвпадения с текущия филтър"
   },
   "Search": {
     "placeholder": "Търсене по модел, напр. A6 2.0 130",
@@ -37,13 +45,15 @@
     "codeColumn": "Код",
     "useColumn": "Приложение",
     "noComponents": "Няма налични препоръки за това превозно средство",
-    "dataLanguageNote": "Данните за автомобила и продуктите са налични само на английски език."
+    "dataLanguageNote": "Данните за автомобила и продуктите са налични само на английски език.",
+    "useFilterLabel": "Приложение"
   },
   "Common": {
     "loading": "Зареждане...",
     "error": "Възникна грешка",
     "retry": "Опитай отново",
     "notFound": "Страницата не е намерена",
-    "removeLabel": "Премахни {label}"
+    "removeLabel": "Премахни {label}",
+    "allOption": "Всички"
   }
 }
