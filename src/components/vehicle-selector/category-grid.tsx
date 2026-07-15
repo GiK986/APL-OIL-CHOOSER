@@ -1,6 +1,7 @@
 "use client";
 
 import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from "@/lib/olyslager/category-icons";
+import { sortByAppOrder } from "./sort-by-app-order";
 import type { Category } from "@/lib/olyslager/types";
 
 interface CategoryGridProps {
@@ -9,9 +10,10 @@ interface CategoryGridProps {
 }
 
 export function CategoryGrid({ categories, onSelect }: CategoryGridProps) {
+  const sorted = sortByAppOrder(categories);
   return (
     <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
-      {categories.map((category) => {
+      {sorted.map((category) => {
         const Icon = CATEGORY_ICONS[category.id] ?? DEFAULT_CATEGORY_ICON;
         return (
           <button

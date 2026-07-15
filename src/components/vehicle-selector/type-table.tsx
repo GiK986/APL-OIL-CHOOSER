@@ -32,7 +32,7 @@ interface TypeTableProps {
   onSelect: (type: VehicleType) => void;
 }
 
-type SortKey = "typeName" | "yearStart" | "powerHP" | "cylinderCC";
+type SortKey = "appOrder" | "typeName" | "yearStart" | "powerHP" | "cylinderCC";
 
 export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   const t = useTranslations("VehiclePicker");
@@ -40,7 +40,7 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   const { data, loading, error, retry } = useOlyslagerList<VehicleType>(
     `/api/olyslager/types?modelId=${modelId}`,
   );
-  const [sortKey, setSortKey] = useState<SortKey>("typeName");
+  const [sortKey, setSortKey] = useState<SortKey>("appOrder");
   const [sortAsc, setSortAsc] = useState(true);
   const [typeNameQuery, setTypeNameQuery] = useState("");
   const [fuel, setFuel] = useState<string | null>(null);

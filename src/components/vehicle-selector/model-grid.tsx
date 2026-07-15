@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
 import { matchesNameFilter } from "./name-filter";
+import { sortByAppOrder } from "./sort-by-app-order";
 import { FilterableStepLayout } from "./filterable-step-layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -52,7 +53,7 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
     return <p className="text-sm text-muted-foreground">{t("emptyModels")}</p>;
   }
 
-  const filtered = data.filter((model) => matchesNameFilter(model.modelName, query));
+  const filtered = sortByAppOrder(data).filter((model) => matchesNameFilter(model.modelName, query));
 
   return (
     <FilterableStepLayout
