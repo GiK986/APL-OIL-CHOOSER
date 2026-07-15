@@ -256,7 +256,7 @@ export function VehicleSelector() {
             <BreadcrumbChip label={typeLabel} onClear={clearFromType} />
           )}
         </div>
-        <div className="w-full md:ml-auto md:w-auto md:max-w-xs">
+        <div className="w-full md:ml-auto md:max-w-xs">
           <SearchBox onSelectResult={selectSearchResult} />
         </div>
       </div>
