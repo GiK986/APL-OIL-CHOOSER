@@ -36,6 +36,9 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local production deployment config (host-specific, never pushed)
+docker-compose.prod.yml
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
