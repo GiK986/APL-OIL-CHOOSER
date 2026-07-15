@@ -34,7 +34,9 @@
     "powerFromLabel": "From",
     "powerToLabel": "To",
     "noMatches": "No matches for the current filter",
-    "filtersButtonLabel": "Filters"
+    "filtersButtonLabel": "Filters",
+    "sortByLabel": "Sort by",
+    "defaultOrderLabel": "Recommended"
   },
   "Search": {
     "placeholder": "Search by model, e.g. A6 2.0 130",
@@ -58,6 +60,8 @@
     "notFound": "Page not found",
     "removeLabel": "Remove {label}",
     "allOption": "All",
-    "closeLabel": "Close"
+    "closeLabel": "Close",
+    "sortAscending": "Sort ascending",
+    "sortDescending": "Sort descending"
   }
 }

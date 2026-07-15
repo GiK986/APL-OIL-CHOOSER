@@ -12,6 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -86,6 +93,21 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
     }
   }
 
+  function sortKeyLabel(key: SortKey) {
+    switch (key) {
+      case "appOrder":
+        return t("defaultOrderLabel");
+      case "typeName":
+        return t("typeLabel");
+      case "yearStart":
+        return t("yearsColumn");
+      case "powerHP":
+        return t("powerColumn");
+      case "cylinderCC":
+        return t("capacityColumn");
+    }
+  }
+
   function clearFilters() {
     setTypeNameQuery("");
     setFuel(null);
@@ -133,113 +155,189 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
             </Button>
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead
-                  aria-sort={
-                    sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined
-                  }
+          <>
+            <div className="flex flex-col gap-3 md:hidden">
+              <div className="flex items-center gap-2">
+                <span className="shrink-0 text-xs font-medium text-muted-foreground">
+                  {t("sortByLabel")}
+                </span>
+                <Select value={sortKey} onValueChange={(value) => toggleSort(value as SortKey)}>
+                  <SelectTrigger size="sm" className="w-full flex-1">
+                    <SelectValue>{sortKeyLabel(sortKey)}</SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="appOrder">{t("defaultOrderLabel")}</SelectItem>
+                    <SelectItem value="typeName">{t("typeLabel")}</SelectItem>
+                    <SelectItem value="yearStart">{t("yearsColumn")}</SelectItem>
+                    <SelectItem value="powerHP">{t("powerColumn")}</SelectItem>
+                    <SelectItem value="cylinderCC">{t("capacityColumn")}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="icon"
+                  aria-label={sortAsc ? tc("sortAscending") : tc("sortDescending")}
+                  onClick={() => toggleSort(sortKey)}
                 >
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1"
-                    onClick={() => toggleSort("typeName")}
-                  >
-                    {t("typeLabel")}
-                    {sortKey === "typeName" &&
-                      (sortAsc ? (
-                        <ChevronUp className="size-3.5" />
-                      ) : (
-                        <ChevronDown className="size-3.5" />
-                      ))}
-                  </button>
-                </TableHead>
-                <TableHead>{t("fuelColumn")}</TableHead>
-                <TableHead
-                  aria-sort={
-                    sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined
-                  }
-                >
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1"
-                    onClick={() => toggleSort("yearStart")}
-                  >
-                    {t("yearsColumn")}
-                    {sortKey === "yearStart" &&
-                      (sortAsc ? (
-                        <ChevronUp className="size-3.5" />
-                      ) : (
-                        <ChevronDown className="size-3.5" />
-                      ))}
-                  </button>
-                </TableHead>
-                <TableHead
-                  aria-sort={
-                    sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined
-                  }
-                >
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1"
-                    onClick={() => toggleSort("powerHP")}
-                  >
-                    {t("powerColumn")}
-                    {sortKey === "powerHP" &&
-                      (sortAsc ? (
-                        <ChevronUp className="size-3.5" />
-                      ) : (
-                        <ChevronDown className="size-3.5" />
-                      ))}
-                  </button>
-                </TableHead>
-                <TableHead
-                  aria-sort={
-                    sortKey === "cylinderCC" ? (sortAsc ? "ascending" : "descending") : undefined
-                  }
-                >
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1"
-                    onClick={() => toggleSort("cylinderCC")}
-                  >
-                    {t("capacityColumn")}
-                    {sortKey === "cylinderCC" &&
-                      (sortAsc ? (
-                        <ChevronUp className="size-3.5" />
-                      ) : (
-                        <ChevronDown className="size-3.5" />
-                      ))}
-                  </button>
-                </TableHead>
-                <TableHead>{t("cylindersColumn")}</TableHead>
-                <TableHead />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
+                  {sortAsc ? (
+                    <ChevronUp className="size-4" />
+                  ) : (
+                    <ChevronDown className="size-4" />
+                  )}
+                </Button>
+              </div>
               {sorted.map((type) => (
-                <TableRow key={type.id}>
-                  <TableCell className="font-medium">{type.typeName}</TableCell>
-                  <TableCell>{type.fuel ?? "—"}</TableCell>
-                  <TableCell>
-                    {type.yearStart}
-                    {type.yearEnd ? `–${type.yearEnd}` : "+"}
-                  </TableCell>
-                  <TableCell>
-                    {type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}
-                  </TableCell>
-                  <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
-                  <TableCell>{type.cylinderCount ?? "—"}</TableCell>
-                  <TableCell>
-                    <Button size="sm" onClick={() => onSelect(type)}>
-                      {t("viewRecommendations")}
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                <div
+                  key={type.id}
+                  className="flex flex-col gap-2 rounded-[3px] border border-border bg-card p-3"
+                >
+                  <p className="text-sm font-medium">{type.typeName}</p>
+                  <dl className="flex flex-col gap-1 text-xs">
+                    <div className="flex items-center justify-between gap-2">
+                      <dt className="text-muted-foreground">{t("fuelColumn")}</dt>
+                      <dd>{type.fuel ?? "—"}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <dt className="text-muted-foreground">{t("yearsColumn")}</dt>
+                      <dd>
+                        {type.yearStart}
+                        {type.yearEnd ? `–${type.yearEnd}` : "+"}
+                      </dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <dt className="text-muted-foreground">{t("powerColumn")}</dt>
+                      <dd>{type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <dt className="text-muted-foreground">{t("capacityColumn")}</dt>
+                      <dd>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <dt className="text-muted-foreground">{t("cylindersColumn")}</dt>
+                      <dd>{type.cylinderCount ?? "—"}</dd>
+                    </div>
+                  </dl>
+                  <Button size="sm" className="w-full" onClick={() => onSelect(type)}>
+                    {t("viewRecommendations")}
+                  </Button>
+                </div>
               ))}
-            </TableBody>
-          </Table>
+            </div>
+            <div className="hidden md:block">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead
+                      aria-sort={
+                        sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1"
+                        onClick={() => toggleSort("typeName")}
+                      >
+                        {t("typeLabel")}
+                        {sortKey === "typeName" &&
+                          (sortAsc ? (
+                            <ChevronUp className="size-3.5" />
+                          ) : (
+                            <ChevronDown className="size-3.5" />
+                          ))}
+                      </button>
+                    </TableHead>
+                    <TableHead>{t("fuelColumn")}</TableHead>
+                    <TableHead
+                      aria-sort={
+                        sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1"
+                        onClick={() => toggleSort("yearStart")}
+                      >
+                        {t("yearsColumn")}
+                        {sortKey === "yearStart" &&
+                          (sortAsc ? (
+                            <ChevronUp className="size-3.5" />
+                          ) : (
+                            <ChevronDown className="size-3.5" />
+                          ))}
+                      </button>
+                    </TableHead>
+                    <TableHead
+                      aria-sort={
+                        sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1"
+                        onClick={() => toggleSort("powerHP")}
+                      >
+                        {t("powerColumn")}
+                        {sortKey === "powerHP" &&
+                          (sortAsc ? (
+                            <ChevronUp className="size-3.5" />
+                          ) : (
+                            <ChevronDown className="size-3.5" />
+                          ))}
+                      </button>
+                    </TableHead>
+                    <TableHead
+                      aria-sort={
+                        sortKey === "cylinderCC"
+                          ? sortAsc
+                            ? "ascending"
+                            : "descending"
+                          : undefined
+                      }
+                    >
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1"
+                        onClick={() => toggleSort("cylinderCC")}
+                      >
+                        {t("capacityColumn")}
+                        {sortKey === "cylinderCC" &&
+                          (sortAsc ? (
+                            <ChevronUp className="size-3.5" />
+                          ) : (
+                            <ChevronDown className="size-3.5" />
+                          ))}
+                      </button>
+                    </TableHead>
+                    <TableHead>{t("cylindersColumn")}</TableHead>
+                    <TableHead />
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sorted.map((type) => (
+                    <TableRow key={type.id}>
+                      <TableCell className="font-medium">{type.typeName}</TableCell>
+                      <TableCell>{type.fuel ?? "—"}</TableCell>
+                      <TableCell>
+                        {type.yearStart}
+                        {type.yearEnd ? `–${type.yearEnd}` : "+"}
+                      </TableCell>
+                      <TableCell>
+                        {type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}
+                      </TableCell>
+                      <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
+                      <TableCell>{type.cylinderCount ?? "—"}</TableCell>
+                      <TableCell>
+                        <Button size="sm" onClick={() => onSelect(type)}>
+                          {t("viewRecommendations")}
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </>
         )
       }
       filters={

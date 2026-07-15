@@ -21,8 +21,8 @@ export function FilterableStepLayout({ content, filters }: FilterableStepLayoutP
   }
 
   return (
-    <div className="flex flex-col gap-3 md:flex-row md:items-start md:gap-6">
-      <div className="flex justify-end md:hidden">
+    <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-6">
+      <div className="flex justify-end lg:hidden">
         <Button variant="outline" size="sm" onClick={() => setIsDrawerOpen(true)}>
           <SlidersHorizontal className="size-3.5" />
           {t("filtersButtonLabel")}
@@ -30,7 +30,7 @@ export function FilterableStepLayout({ content, filters }: FilterableStepLayoutP
       </div>
       <div className="min-w-0 flex-1">{content}</div>
       {!isDrawerOpen && (
-        <aside className="hidden md:block md:w-64 md:shrink-0">{filters}</aside>
+        <aside className="hidden lg:block lg:w-64 lg:shrink-0">{filters}</aside>
       )}
       <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <SheetContent title={t("filtersButtonLabel")} closeLabel={tc("closeLabel")}>

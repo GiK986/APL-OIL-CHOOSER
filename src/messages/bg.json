@@ -34,7 +34,9 @@
     "powerFromLabel": "От",
     "powerToLabel": "До",
     "noMatches": "Няма съвпадения с текущия филтър",
-    "filtersButtonLabel": "Филтри"
+    "filtersButtonLabel": "Филтри",
+    "sortByLabel": "Подредба по",
+    "defaultOrderLabel": "Препоръчано"
   },
   "Search": {
     "placeholder": "Търсене по модел, напр. A6 2.0 130",
@@ -58,6 +60,8 @@
     "notFound": "Страницата не е намерена",
     "removeLabel": "Премахни {label}",
     "allOption": "Всички",
-    "closeLabel": "Затвори"
+    "closeLabel": "Затвори",
+    "sortAscending": "Възходящо подреждане",
+    "sortDescending": "Низходящо подреждане"
   }
 }
