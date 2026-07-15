@@ -15,6 +15,15 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FilterableStepLayout } from "./filterable-step-layout";
+import {
+  EMPTY_TYPE_FILTERS,
+  extractDistinctValues,
+  hasActiveTypeFilters,
+  matchesTypeFilters,
+  type TypeFilters,
+} from "./type-filters";
 import type { VehicleType } from "@/lib/olyslager/types";
 
 interface TypeTableProps {
@@ -32,6 +41,10 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   );
   const [sortKey, setSortKey] = useState<SortKey>("typeName");
   const [sortAsc, setSortAsc] = useState(true);
+  const [fuel, setFuel] = useState<string | null>(null);
+  const [driveType, setDriveType] = useState<string | null>(null);
+  const [powerMinInput, setPowerMinInput] = useState("");
+  const [powerMaxInput, setPowerMaxInput] = useState("");
 
   if (error) {
     return (
@@ -69,7 +82,26 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
     }
   }
 
-  const sorted = [...data].sort((a, b) => {
+  function clearFilters() {
+    setFuel(null);
+    setDriveType(null);
+    setPowerMinInput("");
+    setPowerMaxInput("");
+  }
+
+  const filters: TypeFilters = {
+    ...EMPTY_TYPE_FILTERS,
+    fuel,
+    driveType,
+    powerMin: powerMinInput.trim() === "" ? null : Number(powerMinInput),
+    powerMax: powerMaxInput.trim() === "" ? null : Number(powerMaxInput),
+  };
+  const fuelOptions = extractDistinctValues(data, "fuel");
+  const driveTypeOptions = extractDistinctValues(data, "driveType");
+  const filteredTypes = data.filter((type) => matchesTypeFilters(type, filters));
+  const filtersActive = hasActiveTypeFilters(filters);
+
+  const sorted = [...filteredTypes].sort((a, b) => {
     const dir = sortAsc ? 1 : -1;
     const av = a[sortKey] ?? 0;
     const bv = b[sortKey] ?? 0;
@@ -80,72 +112,194 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   });
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead
-            aria-sort={sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined}
-          >
-            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("typeName")}>
-              {t("typeLabel")}
-              {sortKey === "typeName" &&
-                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
-            </button>
-          </TableHead>
-          <TableHead>{t("fuelColumn")}</TableHead>
-          <TableHead
-            aria-sort={sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined}
-          >
-            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("yearStart")}>
-              {t("yearsColumn")}
-              {sortKey === "yearStart" &&
-                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
-            </button>
-          </TableHead>
-          <TableHead
-            aria-sort={sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined}
-          >
-            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("powerHP")}>
-              {t("powerColumn")}
-              {sortKey === "powerHP" &&
-                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
-            </button>
-          </TableHead>
-          <TableHead
-            aria-sort={sortKey === "cylinderCC" ? (sortAsc ? "ascending" : "descending") : undefined}
-          >
-            <button type="button" className="inline-flex items-center gap-1" onClick={() => toggleSort("cylinderCC")}>
-              {t("capacityColumn")}
-              {sortKey === "cylinderCC" &&
-                (sortAsc ? <ChevronUp className="size-3.5" /> : <ChevronDown className="size-3.5" />)}
-            </button>
-          </TableHead>
-          <TableHead>{t("cylindersColumn")}</TableHead>
-          <TableHead />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {sorted.map((type) => (
-          <TableRow key={type.id}>
-            <TableCell className="font-medium">{type.typeName}</TableCell>
-            <TableCell>{type.fuel ?? "—"}</TableCell>
-            <TableCell>
-              {type.yearStart}
-              {type.yearEnd ? `–${type.yearEnd}` : "+"}
-            </TableCell>
-            <TableCell>
-              {type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}
-            </TableCell>
-            <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
-            <TableCell>{type.cylinderCount ?? "—"}</TableCell>
-            <TableCell>
-              <Button size="sm" onClick={() => onSelect(type)}>
-                {t("viewRecommendations")}
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <FilterableStepLayout
+      content={
+        sorted.length === 0 ? (
+          <div className="flex flex-col items-start gap-2">
+            <p className="text-sm text-muted-foreground">{t("noMatches")}</p>
+            <Button size="sm" variant="outline" onClick={clearFilters}>
+              {t("clearFilters")}
+            </Button>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead
+                  aria-sort={
+                    sortKey === "typeName" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("typeName")}
+                  >
+                    {t("typeLabel")}
+                    {sortKey === "typeName" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead>{t("fuelColumn")}</TableHead>
+                <TableHead
+                  aria-sort={
+                    sortKey === "yearStart" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("yearStart")}
+                  >
+                    {t("yearsColumn")}
+                    {sortKey === "yearStart" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead
+                  aria-sort={
+                    sortKey === "powerHP" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("powerHP")}
+                  >
+                    {t("powerColumn")}
+                    {sortKey === "powerHP" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead
+                  aria-sort={
+                    sortKey === "cylinderCC" ? (sortAsc ? "ascending" : "descending") : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1"
+                    onClick={() => toggleSort("cylinderCC")}
+                  >
+                    {t("capacityColumn")}
+                    {sortKey === "cylinderCC" &&
+                      (sortAsc ? (
+                        <ChevronUp className="size-3.5" />
+                      ) : (
+                        <ChevronDown className="size-3.5" />
+                      ))}
+                  </button>
+                </TableHead>
+                <TableHead>{t("cylindersColumn")}</TableHead>
+                <TableHead />
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sorted.map((type) => (
+                <TableRow key={type.id}>
+                  <TableCell className="font-medium">{type.typeName}</TableCell>
+                  <TableCell>{type.fuel ?? "—"}</TableCell>
+                  <TableCell>
+                    {type.yearStart}
+                    {type.yearEnd ? `–${type.yearEnd}` : "+"}
+                  </TableCell>
+                  <TableCell>
+                    {type.powerHP ? `${type.powerHP} HP / ${type.powerKW} kW` : "—"}
+                  </TableCell>
+                  <TableCell>{type.cylinderCC ? `${type.cylinderCC} ccm` : "—"}</TableCell>
+                  <TableCell>{type.cylinderCount ?? "—"}</TableCell>
+                  <TableCell>
+                    <Button size="sm" onClick={() => onSelect(type)}>
+                      {t("viewRecommendations")}
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )
+      }
+      filters={
+        <div className="flex flex-col gap-3 rounded-[3px] border border-border bg-card p-3">
+          <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="type-fuel-filter">
+              {t("fuelFilterLabel")}
+            </label>
+            <select
+              id="type-fuel-filter"
+              value={fuel ?? ""}
+              onChange={(e) => setFuel(e.target.value === "" ? null : e.target.value)}
+              className="h-8 w-full rounded-[3px] border border-input bg-transparent px-2 text-sm"
+            >
+              <option value="">{tc("allOption")}</option>
+              {fuelOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <label
+              className="text-xs font-medium text-muted-foreground"
+              htmlFor="type-drivetype-filter"
+            >
+              {t("driveTypeFilterLabel")}
+            </label>
+            <select
+              id="type-drivetype-filter"
+              value={driveType ?? ""}
+              onChange={(e) => setDriveType(e.target.value === "" ? null : e.target.value)}
+              className="h-8 w-full rounded-[3px] border border-input bg-transparent px-2 text-sm"
+            >
+              <option value="">{tc("allOption")}</option>
+              {driveTypeOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className="text-xs font-medium text-muted-foreground">{t("powerColumn")}</span>
+            <div className="flex items-center gap-2">
+              <Input
+                type="number"
+                inputMode="numeric"
+                value={powerMinInput}
+                onChange={(e) => setPowerMinInput(e.target.value)}
+                placeholder={t("powerFromLabel")}
+                aria-label={t("powerFromLabel")}
+              />
+              <Input
+                type="number"
+                inputMode="numeric"
+                value={powerMaxInput}
+                onChange={(e) => setPowerMaxInput(e.target.value)}
+                placeholder={t("powerToLabel")}
+                aria-label={t("powerToLabel")}
+              />
+            </div>
+          </div>
+          {filtersActive && (
+            <Button size="sm" variant="outline" onClick={clearFilters}>
+              {t("clearFilters")}
+            </Button>
+          )}
+        </div>
+      }
+    />
   );
 }
