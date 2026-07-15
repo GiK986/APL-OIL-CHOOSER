@@ -29,7 +29,9 @@ export function FilterableStepLayout({ content, filters }: FilterableStepLayoutP
         </Button>
       </div>
       <div className="min-w-0 flex-1">{content}</div>
-      <aside className="hidden md:block md:w-64 md:shrink-0">{filters}</aside>
+      {!isDrawerOpen && (
+        <aside className="hidden md:block md:w-64 md:shrink-0">{filters}</aside>
+      )}
       <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
         <SheetContent title={t("filtersButtonLabel")} closeLabel={tc("closeLabel")}>
           {filters}
