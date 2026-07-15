@@ -18,7 +18,7 @@ export default async function HomePage({
         <h1 className="text-3xl font-semibold tracking-tight">{t("headline")}</h1>
         <p className="mt-3 text-muted-foreground">{t("subcopy")}</p>
       </div>
-      <div className="mt-10 w-full max-w-5xl">
+      <div className="mt-10 w-full max-w-[1320px]">
         <Suspense
           fallback={
             <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
