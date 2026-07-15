@@ -236,25 +236,27 @@ export function VehicleSelector() {
         />
       )}
 
-      <div className="flex flex-wrap items-center gap-2">
-        {make && (
-          <BreadcrumbChip
-            label={make.makeName}
-            imageUrl={make.imageUrlSmall}
-            onClear={clearFromMake}
-          />
-        )}
-        {model && (
-          <BreadcrumbChip
-            label={model.modelName}
-            imageUrl={model.imageUrlSmall}
-            onClear={clearFromModel}
-          />
-        )}
-        {typeId != null && typeLabel && (
-          <BreadcrumbChip label={typeLabel} onClear={clearFromType} />
-        )}
-        <div className="ml-auto w-full max-w-xs">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center">
+        <div className="flex flex-wrap items-center gap-2">
+          {make && (
+            <BreadcrumbChip
+              label={make.makeName}
+              imageUrl={make.imageUrlSmall}
+              onClear={clearFromMake}
+            />
+          )}
+          {model && (
+            <BreadcrumbChip
+              label={model.modelName}
+              imageUrl={model.imageUrlSmall}
+              onClear={clearFromModel}
+            />
+          )}
+          {typeId != null && typeLabel && (
+            <BreadcrumbChip label={typeLabel} onClear={clearFromType} />
+          )}
+        </div>
+        <div className="w-full md:ml-auto md:w-auto md:max-w-xs">
           <SearchBox onSelectResult={selectSearchResult} />
         </div>
       </div>
