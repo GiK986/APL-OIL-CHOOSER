@@ -291,7 +291,7 @@ export function VehicleSelector() {
       )}
       {step === "type" && model && <TypeTable modelId={model.id} onSelect={selectType} />}
       {step === "results" && typeId != null && (
-        <ResultsPanel typeId={typeId} onLoaded={(rec) => setTypeLabel(rec.typeName)} />
+        <ResultsPanel key={typeId} typeId={typeId} onLoaded={(rec) => setTypeLabel(rec.typeName)} />
       )}
     </div>
   );
