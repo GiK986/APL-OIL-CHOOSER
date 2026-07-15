@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
-import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON } from "@/lib/olyslager/category-icons";
 import { deriveStep } from "./derive-step";
 import { BreadcrumbChip } from "./breadcrumb-chip";
 import { CategoryGrid } from "./category-grid";
@@ -52,7 +51,6 @@ export function VehicleSelector() {
   const [model, setModel] = useState<Model | null>(null);
   const [typeId, setTypeId] = useState<number | null>(null);
   const [typeLabel, setTypeLabel] = useState<string | null>(null);
-  const [showCategoryGrid, setShowCategoryGrid] = useState(false);
 
   // Once the user makes an explicit selection/clear, URL-hydration effects below
   // must stop resolving state from search params: right after a clear, the URL
@@ -71,7 +69,7 @@ export function VehicleSelector() {
   }
 
   useEffect(() => {
-    if (categories && !category && !showCategoryGrid && !hasInteracted) {
+    if (categories && !category && !hasInteracted) {
       const fromUrl =
         urlCategoryId != null ? categories.find((c) => c.id === urlCategoryId) : undefined;
       const defaultCategory =
@@ -79,7 +77,7 @@ export function VehicleSelector() {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing local selection state to the fetched categories list once they arrive, same pattern as the fetch-on-dependency-change effects elsewhere in this codebase
       if (defaultCategory) setCategory(defaultCategory);
     }
-  }, [categories, category, showCategoryGrid, urlCategoryId, hasInteracted]);
+  }, [categories, category, urlCategoryId, hasInteracted]);
 
   const needsMakeResolution =
     !hasInteracted && urlMakeId != null && make === null && category !== null;
@@ -130,22 +128,13 @@ export function VehicleSelector() {
   }, [urlTypeId, typeId, hasInteracted]);
 
   function selectCategory(next: Category) {
+    if (next.id === category?.id) return;
     setCategory(next);
     setMake(null);
     setModel(null);
     setTypeId(null);
     setTypeLabel(null);
-    setShowCategoryGrid(false);
     pushSelection({ categoryId: next.id, makeId: null, modelId: null, typeId: null });
-  }
-  function clearFromCategory() {
-    setShowCategoryGrid(true);
-    setCategory(null);
-    setMake(null);
-    setModel(null);
-    setTypeId(null);
-    setTypeLabel(null);
-    pushSelection({ categoryId: null, makeId: null, modelId: null, typeId: null });
   }
   function selectMake(next: Make) {
     setMake(next);
@@ -204,7 +193,6 @@ export function VehicleSelector() {
     });
   }
   function selectSearchResult(result: SearchResult) {
-    setShowCategoryGrid(false);
     setCategory(null);
     setMake(null);
     setModel(null);
@@ -214,11 +202,9 @@ export function VehicleSelector() {
   }
 
   const step = deriveStep({
-    hasCategory: category !== null,
     hasMake: make !== null,
     hasModel: model !== null,
     hasType: typeId !== null,
-    showCategoryGrid,
   });
 
   const resolvingSelection =
@@ -227,14 +213,30 @@ export function VehicleSelector() {
 
   return (
     <div className="flex w-full flex-col gap-4">
+      {error ? (
+        <Alert variant="destructive">
+          <AlertDescription className="flex items-center justify-between gap-2">
+            <span>{tc("error")}</span>
+            <Button size="sm" variant="outline" onClick={retry}>
+              {tc("retry")}
+            </Button>
+          </AlertDescription>
+        </Alert>
+      ) : loading || !categories ? (
+        <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-24 w-full" />
+          ))}
+        </div>
+      ) : (
+        <CategoryGrid
+          categories={categories}
+          selectedCategoryId={category?.id ?? null}
+          onSelect={selectCategory}
+        />
+      )}
+
       <div className="flex flex-wrap items-center gap-2">
-        {category && !showCategoryGrid && (
-          <BreadcrumbChip
-            label={category.categoryName}
-            icon={CATEGORY_ICONS[category.id] ?? DEFAULT_CATEGORY_ICON}
-            onClear={clearFromCategory}
-          />
-        )}
         {make && (
           <BreadcrumbChip
             label={make.makeName}
@@ -257,26 +259,7 @@ export function VehicleSelector() {
         </div>
       </div>
 
-      {step === "category" &&
-        (error ? (
-          <Alert variant="destructive">
-            <AlertDescription className="flex items-center justify-between gap-2">
-              <span>{tc("error")}</span>
-              <Button size="sm" variant="outline" onClick={retry}>
-                {tc("retry")}
-              </Button>
-            </AlertDescription>
-          </Alert>
-        ) : loading || !categories ? (
-          <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 w-full" />
-            ))}
-          </div>
-        ) : (
-          <CategoryGrid categories={categories} onSelect={selectCategory} />
-        ))}
-      {step !== "category" && resolvingSelection && (
+      {resolvingSelection && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {Array.from({ length: 10 }).map((_, i) => (
             <Skeleton key={i} className="h-32 w-full" />
