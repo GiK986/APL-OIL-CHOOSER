@@ -25,6 +25,7 @@
     "capacityColumn": "Обем",
     "cylindersColumn": "Цилиндри",
     "filterByName": "Търсене по име",
+    "recentSearchesLabel": "Предишни търсения",
     "clearFilter": "Изчисти филтър",
     "clearFilters": "Изчисти филтри",
     "fuelFilterLabel": "Гориво",

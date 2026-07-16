@@ -25,6 +25,7 @@
     "capacityColumn": "Capacity",
     "cylindersColumn": "Cylinders",
     "filterByName": "Search by name",
+    "recentSearchesLabel": "Previous searches",
     "clearFilter": "Clear filter",
     "clearFilters": "Clear filters",
     "fuelFilterLabel": "Fuel",
