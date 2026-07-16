@@ -237,7 +237,6 @@ function makeProduct(overrides: Partial<ProductRecommendation> = {}): ProductRec
     productAppOrder: 1,
     productName: "Test Product",
     productCode: null,
-    productImage: null,
     temperatureName: null,
     useAppOrder: 1,
     useName: "Normal",
@@ -246,6 +245,15 @@ function makeProduct(overrides: Partial<ProductRecommendation> = {}): ProductRec
     ...overrides,
   };
 }
+```
+
+`productImage` is deliberately **not** in this helper yet — `ProductRecommendation`
+doesn't gain that field until Task 3. Adding it here now would be an excess-property
+type error against the current type. Task 3 adds `productImage: null` to this
+helper in the same step where it patches `product-use-filter.test.ts` for the
+same reason.
+
+```ts
 
 test("groups products by useName", () => {
   const products = [
@@ -349,11 +357,7 @@ Expected: `tests 6`, `pass 6`, `fail 0`.
 - [ ] **Step 5: Typecheck**
 
 Run: `npx tsc --noEmit`
-Expected: no errors. (This will fail until Task 3's `productImage` field
-exists on `ProductRecommendation` — if Task 3 hasn't run yet, the
-`makeProduct` helper's `productImage: null` will error. Do Task 3 first if
-running these out of order, or accept the type error here and let Task 3
-fix it. Tasks in this plan are meant to run in order.)
+Expected: no errors.
 
 - [ ] **Step 6: Commit**
 
@@ -427,13 +431,12 @@ export interface ProductRecommendation {
 Run: `npx tsc --noEmit`
 Expected: errors in `src/components/vehicle-selector/product-use-filter.test.ts`
 and `src/components/results/group-products-by-use.test.ts` (both build a
-`ProductRecommendation` object literal missing the new required field).
-Fix both by adding `productImage: null` to each file's `makeProduct` helper
-default object (`product-use-filter.test.ts`'s `makeProduct` — the plan
-deletes this file in Task 6, but it must typecheck until then;
-`group-products-by-use.test.ts`'s `makeProduct` already includes
-`productImage: null` from Task 2 Step 1 above, so only
-`product-use-filter.test.ts` needs the one-line edit here).
+`ProductRecommendation` object literal missing the new required field —
+neither file's `makeProduct` helper includes `productImage` yet, since the
+field didn't exist on the type when Tasks 2/earlier were written). Fix both
+by adding `productImage: null` to each file's `makeProduct` helper default
+object (`product-use-filter.test.ts`'s `makeProduct` — the plan deletes
+this file in Task 6, but it must typecheck until then).
 
 In `src/components/vehicle-selector/product-use-filter.test.ts`, change:
 
@@ -471,6 +474,10 @@ function makeProduct(overrides: Partial<ProductRecommendation> = {}): ProductRec
   };
 }
 ```
+
+In `src/components/results/group-products-by-use.test.ts`, apply the same
+one-line addition to its `makeProduct` helper (add `productImage: null,`
+right after the `productCode: null,` line).
 
 Run `npx tsc --noEmit` again.
 Expected: no errors.
