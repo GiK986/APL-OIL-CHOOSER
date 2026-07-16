@@ -19,7 +19,10 @@ export function getRecentSearches(): RecentSearchEntry[] {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw) as unknown;
-    return Array.isArray(parsed) ? (parsed as RecentSearchEntry[]) : [];
+    if (!Array.isArray(parsed)) return [];
+    return (parsed as RecentSearchEntry[]).filter(
+      (entry) => entry != null && typeof entry.typeId === "number",
+    );
   } catch {
     return [];
   }

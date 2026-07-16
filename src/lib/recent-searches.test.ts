@@ -78,6 +78,16 @@ test("addRecentSearch caps the list at 20 entries", () => {
   assert.equal(all[0].typeName, "Type 24");
 });
 
+test("getRecentSearches filters out malformed entries missing a numeric typeId", () => {
+  localStorage.setItem(
+    "apl-oil-chooser:recent-searches",
+    JSON.stringify([makeEntry({ typeId: 1 }), { categoryId: 1 }, makeEntry({ typeId: 2 })]),
+  );
+  const all = getRecentSearches();
+  assert.equal(all.length, 2);
+  assert.deepEqual(all.map((e) => e.typeId), [1, 2]);
+});
+
 test("getRecentSearches returns an empty array when localStorage is unavailable", () => {
   delete (globalThis as { localStorage?: Storage }).localStorage;
   assert.deepEqual(getRecentSearches(), []);

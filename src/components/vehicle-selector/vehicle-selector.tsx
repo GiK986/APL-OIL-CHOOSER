@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
@@ -214,19 +214,22 @@ export function VehicleSelector() {
     jumpToType(result.typeId, result.type);
   }
 
-  function handleResultsLoaded(rec: Recommendation) {
-    setTypeLabel(rec.typeName);
-    addRecentSearch({
-      typeId: rec.id,
-      categoryId: rec.categoryId,
-      categoryName: rec.categoryName,
-      makeName: rec.makeName,
-      modelName: rec.modelName,
-      typeName: rec.typeName,
-      yearStart: rec.yearStart,
-      yearEnd: rec.yearEnd,
-    });
-  }
+  const handleResultsLoaded = useCallback(
+    (rec: Recommendation) => {
+      setTypeLabel(rec.typeName);
+      addRecentSearch({
+        typeId: rec.id,
+        categoryId: rec.categoryId,
+        categoryName: rec.categoryName,
+        makeName: rec.makeName,
+        modelName: rec.modelName,
+        typeName: rec.typeName,
+        yearStart: rec.yearStart,
+        yearEnd: rec.yearEnd,
+      });
+    },
+    [addRecentSearch],
+  );
 
   const step = deriveStep({
     hasMake: make !== null,
