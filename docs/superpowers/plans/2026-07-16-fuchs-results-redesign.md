@@ -762,7 +762,7 @@ git commit -m "feat: add VehicleSidebarCard"
   `VehicleSidebarCard` (Task 5), existing `useOlyslagerResource` hook.
 - Produces: `ResultsPanel({ typeId: number, onLoaded?: (rec: Recommendation)
   => void })` — same public signature as today, `vehicle-selector.tsx`
-  (Task 10) doesn't need any prop-shape change here.
+  (Task 9) doesn't need any prop-shape change here.
 
 - [ ] **Step 1: Replace `results-panel.tsx`**
 
@@ -1186,12 +1186,13 @@ git commit -m "feat: add recent-searches localStorage module"
 - Produces: `useRecentSearches(): { entries: RecentSearchEntry[]; add:
   (entry: RecentSearchEntry) => void }` and `RecentSearchesList({ entries:
   RecentSearchEntry[]; onSelect: (entry: RecentSearchEntry) => void })` —
-  Task 9 (`MakeGrid`) renders `RecentSearchesList`; Task 10
-  (`VehicleSelector`) calls `useRecentSearches()`.
+  Task 9 (`MakeGrid` + `VehicleSelector` integration) renders
+  `RecentSearchesList` from `MakeGrid` and calls `useRecentSearches()` from
+  `VehicleSelector`.
 
 No unit test for either (the hook is a thin `useState`/`useEffect` wrapper
 around already-tested pure functions; `RecentSearchesList` is
-presentational) — verified in Task 10's manual end-to-end check.
+presentational) — verified in Task 9's manual end-to-end check.
 
 - [ ] **Step 1: Create the hook**
 
@@ -1302,21 +1303,28 @@ git commit -m "feat: add useRecentSearches hook and RecentSearchesList"
 
 ---
 
-## Task 9: `MakeGrid` integration
+## Task 9: `MakeGrid` + `VehicleSelector` integration
 
 **Files:**
 - Modify: `src/components/vehicle-selector/make-grid.tsx`
+- Modify: `src/components/vehicle-selector/vehicle-selector.tsx`
 
 **Interfaces:**
-- Consumes: `RecentSearchesList` (Task 8), `RecentSearchEntry` (Task 7).
-- Produces: `MakeGrid` now takes two new required props —
-  `recentSearches: RecentSearchEntry[]` (the **full**, unfiltered list) and
-  `onSelectRecentSearch: (entry: RecentSearchEntry) => void`. `MakeGrid`
-  itself filters `recentSearches` down to the current `categoryId` before
-  handing them to `RecentSearchesList` — this is the "filtered by category"
-  behavior, and it's why the prop carries the unfiltered list rather than an
-  already-filtered one. Task 10 (`VehicleSelector`) is the only caller and
-  must pass both.
+- Consumes: `RecentSearchesList` (Task 8), `RecentSearchEntry` (Task 7),
+  `useRecentSearches` (Task 8).
+- Produces: no new exports — this is the final wiring task, and the
+  deliverable is the fully working feature end-to-end. `MakeGrid` gains two
+  new required props — `recentSearches: RecentSearchEntry[]` (the **full**,
+  unfiltered list) and `onSelectRecentSearch: (entry: RecentSearchEntry) =>
+  void`. `MakeGrid` itself filters `recentSearches` down to the current
+  `categoryId` before handing them to `RecentSearchesList` — this is the
+  "filtered by category" behavior, and it's why the prop carries the
+  unfiltered list rather than an already-filtered one.
+
+This task is deliberately one task, not two: `MakeGrid`'s new props have no
+caller until `VehicleSelector` supplies them, so a `MakeGrid`-only commit
+would leave the branch not typechecking until the `VehicleSelector` half
+lands. Both changes land together; only the combined result is reviewed.
 
 - [ ] **Step 1: Update `make-grid.tsx`**
 
@@ -1563,36 +1571,20 @@ export function MakeGrid({
 }
 ```
 
-- [ ] **Step 2: Typecheck**
-
-Run: `npx tsc --noEmit`
-Expected: an error in `src/components/vehicle-selector/vehicle-selector.tsx`
-— its existing `<MakeGrid categoryId={category.id} onSelect={selectMake}
-/>` call is now missing the two new required props. This is expected and
-fixed in Task 10 (the next task); confirm the error is exactly this one
-missing-props error and nothing else, then move on.
-
-- [ ] **Step 3: Commit**
+- [ ] **Step 2: Commit the `MakeGrid` half**
 
 ```bash
 git add src/components/vehicle-selector/make-grid.tsx
 git commit -m "feat: render category-filtered recent searches in MakeGrid's sidebar"
 ```
 
----
+(`npx tsc --noEmit` will show one expected error right now —
+`vehicle-selector.tsx`'s existing `<MakeGrid categoryId={category.id}
+onSelect={selectMake} />` call is missing the two new required props.
+Continue to the next step, which resolves it; this task isn't done until
+that error is gone.)
 
-## Task 10: `VehicleSelector` integration
-
-**Files:**
-- Modify: `src/components/vehicle-selector/vehicle-selector.tsx`
-
-**Interfaces:**
-- Consumes: `useRecentSearches` (Task 8), `RecentSearchEntry` (Task 7),
-  `MakeGrid`'s new props (Task 9).
-- Produces: no new exports — this is the final wiring task, and the
-  deliverable is the fully working feature end-to-end.
-
-- [ ] **Step 1: Add the recent-searches hook and update imports**
+- [ ] **Step 3: Add the recent-searches hook and update imports in `vehicle-selector.tsx`**
 
 In `src/components/vehicle-selector/vehicle-selector.tsx`, the top of the
 file currently reads:
@@ -1653,7 +1645,7 @@ import type {
 } from "@/lib/olyslager/types";
 ```
 
-- [ ] **Step 2: Add the hook call**
+- [ ] **Step 4: Add the hook call**
 
 Right after the existing `const [typeLabel, setTypeLabel] =
 useState<string | null>(null);` line (before the `hasInteracted` comment
@@ -1663,7 +1655,7 @@ block), add:
   const { entries: recentSearches, add: addRecentSearch } = useRecentSearches();
 ```
 
-- [ ] **Step 3: Add `jumpToType` and rewrite `selectSearchResult`**
+- [ ] **Step 5: Add `jumpToType` and rewrite `selectSearchResult`**
 
 The current `selectSearchResult` function reads:
 
@@ -1711,7 +1703,7 @@ and keeps the existing `setTypeLabel` behavior:
   }
 ```
 
-- [ ] **Step 4: Wire the new props into the render**
+- [ ] **Step 6: Wire the new props into the render**
 
 The current `MakeGrid` render line reads:
 
@@ -1750,21 +1742,21 @@ Replace with:
       )}
 ```
 
-- [ ] **Step 5: Typecheck, lint, and run the full test suite**
+- [ ] **Step 7: Typecheck, lint, and run the full test suite**
 
 Run: `npx tsc --noEmit`
-Expected: no errors (this resolves Task 9's expected error).
+Expected: no errors (this resolves Step 2's expected error).
 
 Run: `npm run lint`
 Expected: no errors.
 
 Run: `node --test src/**/*.test.ts`
-Expected: all pass (31 tests: 29 baseline − 4 deleted with
+Expected: all pass (37 tests: 29 baseline − 4 deleted with
 `product-use-filter.test.ts` + 6 from Task 2 + 6 from Task 7 = 37; adjust
 expectation to whatever the actual running total is at this point in a real
 run — the point of this step is zero failures, not a specific magic number).
 
-- [ ] **Step 6: Manual end-to-end verification**
+- [ ] **Step 8: Manual end-to-end verification**
 
 Start the dev server:
 
@@ -1798,7 +1790,7 @@ In a browser, open `http://localhost:3000/en` and:
 
 Stop the dev server (`Ctrl+C`) once confirmed.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 9: Commit the `VehicleSelector` half**
 
 ```bash
 git add src/components/vehicle-selector/vehicle-selector.tsx
@@ -1811,10 +1803,17 @@ git commit -m "feat: wire recent-searches into VehicleSelector"
 
 - **Spec coverage:** accordion redesign (Tasks 1, 3, 4, 5, 6), product
   image fallback (Task 3), grouping utility (Task 2), previous-searches
-  list scoped to the Make step and filtered by category (Tasks 7–10),
+  list scoped to the Make step and filtered by category (Tasks 7–9),
   i18n cleanup (Tasks 6, 8) — every section of
   `docs/superpowers/specs/2026-07-16-fuchs-results-redesign-design.md` maps
   to a task above.
+- **Pre-flight correction (before dispatching any implementer):** the
+  original draft split `MakeGrid`'s prop changes and `VehicleSelector`'s
+  wiring into two separate tasks (9 and 10), with Task 9 explicitly ending
+  in a known `tsc` error only Task 10 resolved. That violates this plan's
+  own "each task ends with an independently testable deliverable"
+  principle, so the two were merged into one Task 9 with two commits
+  before execution began.
 - **Type consistency check performed:** `ProductUseGroup`,
   `RecentSearchEntry`, `ComponentAccordion`/`ProductGrid`/`ProductCard`/
   `ProductUseSection`/`VehicleSidebarCard`/`RecentSearchesList` prop names
