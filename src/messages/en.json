@@ -43,15 +43,9 @@
     "noResults": "No matches — try a different search"
   },
   "Results": {
-    "recommendedProducts": "Recommended products",
-    "capacities": "Capacities",
     "changeInterval": "Change interval",
-    "productColumn": "Product",
-    "codeColumn": "Code",
-    "useColumn": "Use",
     "noComponents": "No recommendations available for this vehicle",
-    "dataLanguageNote": "Vehicle and product data is provided in English.",
-    "useFilterLabel": "Use"
+    "dataLanguageNote": "Vehicle and product data is provided in English."
   },
   "Common": {
     "loading": "Loading...",
