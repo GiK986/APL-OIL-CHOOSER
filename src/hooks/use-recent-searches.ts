@@ -12,6 +12,7 @@ export function useRecentSearches(): UseRecentSearchesResult {
   const [entries, setEntries] = useState<RecentSearchEntry[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing local state from localStorage once on mount, same pattern as the fetch-on-dependency-change effects elsewhere in this codebase
     setEntries(getRecentSearches());
   }, []);
 

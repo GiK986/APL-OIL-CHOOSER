@@ -17,7 +17,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
-import type { RecentSearchEntry } from "@/lib/recent-searches";
 import type {
   Category,
   Make,
