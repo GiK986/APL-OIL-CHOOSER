@@ -65,6 +65,7 @@ export interface ProductRecommendation {
   productAppOrder: number;
   productName: string;
   productCode: string | null;
+  productImage: string | null;
   temperatureName: string | null;
   useAppOrder: number;
   useName: string | null;

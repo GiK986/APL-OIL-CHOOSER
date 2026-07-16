@@ -8,6 +8,7 @@ function makeProduct(overrides: Partial<ProductRecommendation> = {}): ProductRec
     productAppOrder: 1,
     productName: "Test Product",
     productCode: null,
+    productImage: null,
     temperatureName: null,
     useAppOrder: 1,
     useName: "Normal",
