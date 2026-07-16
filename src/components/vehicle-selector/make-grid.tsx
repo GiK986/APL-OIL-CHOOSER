@@ -7,18 +7,27 @@ import { useOlyslagerList } from "@/hooks/use-olyslager-list";
 import { matchesNameFilter } from "./name-filter";
 import { sortByAppOrder } from "./sort-by-app-order";
 import { FilterableStepLayout } from "./filterable-step-layout";
+import { RecentSearchesList } from "./recent-searches-list";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { Make } from "@/lib/olyslager/types";
+import type { RecentSearchEntry } from "@/lib/recent-searches";
 
 interface MakeGridProps {
   categoryId: number;
   onSelect: (make: Make) => void;
+  recentSearches: RecentSearchEntry[];
+  onSelectRecentSearch: (entry: RecentSearchEntry) => void;
 }
 
-export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
+export function MakeGrid({
+  categoryId,
+  onSelect,
+  recentSearches,
+  onSelectRecentSearch,
+}: MakeGridProps) {
   const t = useTranslations("VehiclePicker");
   const tc = useTranslations("Common");
   const { data, loading, error, retry } = useOlyslagerList<Make>(
@@ -54,6 +63,7 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
   }
 
   const filtered = sortByAppOrder(data).filter((make) => matchesNameFilter(make.makeName, query));
+  const categoryRecentSearches = recentSearches.filter((entry) => entry.categoryId === categoryId);
 
   return (
     <FilterableStepLayout
@@ -92,16 +102,19 @@ export function MakeGrid({ categoryId, onSelect }: MakeGridProps) {
         )
       }
       filters={
-        <div className="flex flex-col gap-2 rounded-[3px] border border-border bg-card p-3">
-          <label className="text-xs font-medium text-muted-foreground" htmlFor="make-name-filter">
-            {t("filterByName")}
-          </label>
-          <Input
-            id="make-name-filter"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("filterByName")}
-          />
+        <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2 rounded-[3px] border border-border bg-card p-3">
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="make-name-filter">
+              {t("filterByName")}
+            </label>
+            <Input
+              id="make-name-filter"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("filterByName")}
+            />
+          </div>
+          <RecentSearchesList entries={categoryRecentSearches} onSelect={onSelectRecentSearch} />
         </div>
       }
     />
