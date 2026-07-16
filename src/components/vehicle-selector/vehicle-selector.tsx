@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useOlyslagerList } from "@/hooks/use-olyslager-list";
+import { useRecentSearches } from "@/hooks/use-recent-searches";
 import { deriveStep } from "./derive-step";
 import { BreadcrumbChip } from "./breadcrumb-chip";
 import { CategoryGrid } from "./category-grid";
@@ -16,7 +17,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
-import type { Category, Make, Model, VehicleType, SearchResult } from "@/lib/olyslager/types";
+import type { RecentSearchEntry } from "@/lib/recent-searches";
+import type {
+  Category,
+  Make,
+  Model,
+  VehicleType,
+  SearchResult,
+  Recommendation,
+} from "@/lib/olyslager/types";
 
 const DEFAULT_CATEGORY_ID = 1; // Cars
 
@@ -51,6 +60,7 @@ export function VehicleSelector() {
   const [model, setModel] = useState<Model | null>(null);
   const [typeId, setTypeId] = useState<number | null>(null);
   const [typeLabel, setTypeLabel] = useState<string | null>(null);
+  const { entries: recentSearches, add: addRecentSearch } = useRecentSearches();
 
   // Once the user makes an explicit selection/clear, URL-hydration effects below
   // must stop resolving state from search params: right after a clear, the URL
@@ -192,13 +202,31 @@ export function VehicleSelector() {
       typeId: null,
     });
   }
-  function selectSearchResult(result: SearchResult) {
+  function jumpToType(id: number, label: string) {
     setCategory(null);
     setMake(null);
     setModel(null);
-    setTypeId(result.typeId);
-    setTypeLabel(result.type);
-    pushSelection({ categoryId: null, makeId: null, modelId: null, typeId: result.typeId });
+    setTypeId(id);
+    setTypeLabel(label);
+    pushSelection({ categoryId: null, makeId: null, modelId: null, typeId: id });
+  }
+
+  function selectSearchResult(result: SearchResult) {
+    jumpToType(result.typeId, result.type);
+  }
+
+  function handleResultsLoaded(rec: Recommendation) {
+    setTypeLabel(rec.typeName);
+    addRecentSearch({
+      typeId: rec.id,
+      categoryId: rec.categoryId,
+      categoryName: rec.categoryName,
+      makeName: rec.makeName,
+      modelName: rec.modelName,
+      typeName: rec.typeName,
+      yearStart: rec.yearStart,
+      yearEnd: rec.yearEnd,
+    });
   }
 
   const step = deriveStep({
@@ -269,14 +297,19 @@ export function VehicleSelector() {
         </div>
       )}
       {step === "make" && category && !resolvingSelection && (
-        <MakeGrid categoryId={category.id} onSelect={selectMake} />
+        <MakeGrid
+          categoryId={category.id}
+          onSelect={selectMake}
+          recentSearches={recentSearches}
+          onSelectRecentSearch={(entry) => jumpToType(entry.typeId, entry.typeName)}
+        />
       )}
       {step === "model" && make && !resolvingSelection && (
         <ModelGrid makeId={make.id} onSelect={selectModel} />
       )}
       {step === "type" && model && <TypeTable modelId={model.id} onSelect={selectType} />}
       {step === "results" && typeId != null && (
-        <ResultsPanel key={typeId} typeId={typeId} onLoaded={(rec) => setTypeLabel(rec.typeName)} />
+        <ResultsPanel key={typeId} typeId={typeId} onLoaded={handleResultsLoaded} />
       )}
     </div>
   );
