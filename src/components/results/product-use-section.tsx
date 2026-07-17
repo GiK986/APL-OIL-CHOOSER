@@ -9,7 +9,7 @@ export function ProductUseSection({ group }: { group: ProductUseGroup }) {
     .join(" | ");
 
   return (
-    <div className="mb-4 last:mb-0">
+    <div className="mb-4 border-t border-primary pt-4 first:mt-0 first:border-t-0 first:pt-0 last:mb-0">
       <p className="text-sm font-semibold">{group.useName}</p>
       {intervalsSummary && (
         <p className="mb-2 text-xs text-muted-foreground">

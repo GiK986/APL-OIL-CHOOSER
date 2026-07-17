@@ -48,7 +48,7 @@ export function ResultsPanel({ typeId, onLoaded }: ResultsPanelProps) {
           <Skeleton className="h-16 w-full" />
           <Skeleton className="h-16 w-full" />
         </div>
-        <Skeleton className="h-64 w-full lg:w-64 lg:shrink-0" />
+        <Skeleton className="h-64 w-full lg:w-80 lg:shrink-0" />
       </div>
     );
   }
@@ -61,7 +61,7 @@ export function ResultsPanel({ typeId, onLoaded }: ResultsPanelProps) {
             <AlertDescription>{t("noComponents")}</AlertDescription>
           </Alert>
         </div>
-        <aside className="lg:w-64 lg:shrink-0">
+        <aside className="lg:w-80 lg:shrink-0">
           <VehicleSidebarCard vehicle={data} />
         </aside>
       </div>
@@ -77,7 +77,7 @@ export function ResultsPanel({ typeId, onLoaded }: ResultsPanelProps) {
           ))}
         </Accordion>
       </div>
-      <aside className="lg:w-64 lg:shrink-0">
+      <aside className="lg:w-80 lg:shrink-0">
         <VehicleSidebarCard vehicle={data} />
       </aside>
     </div>

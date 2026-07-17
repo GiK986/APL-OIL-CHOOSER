@@ -45,8 +45,13 @@
   },
   "Results": {
     "changeInterval": "Change interval",
+    "capacitySpecLabel": "Capacity (specification OEM)",
     "noComponents": "No recommendations available for this vehicle",
-    "dataLanguageNote": "Vehicle and product data is provided in English."
+    "manufacturerLabel": "Manufacturer",
+    "modelLabel": "Model",
+    "typeLabel": "Type",
+    "yearOfConstructionLabel": "Year of construction",
+    "fuelLabel": "Fuel"
   },
   "Common": {
     "loading": "Loading...",

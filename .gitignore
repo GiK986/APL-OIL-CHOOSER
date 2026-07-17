@@ -42,3 +42,8 @@ docker-compose.prod.yml
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local test product photos (real Fuchs product images, not for version control —
+# the app falls back to fuchs-no-image.jpg when one of these is missing)
+/public/products/*.jpg
+!/public/products/fuchs-no-image.jpg

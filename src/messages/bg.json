@@ -45,8 +45,13 @@
   },
   "Results": {
     "changeInterval": "Интервал на смяна",
+    "capacitySpecLabel": "Капацитет (спецификация OEM)",
     "noComponents": "Няма налични препоръки за това превозно средство",
-    "dataLanguageNote": "Данните за автомобила и продуктите са налични само на английски език."
+    "manufacturerLabel": "Производител",
+    "modelLabel": "Модел",
+    "typeLabel": "Тип",
+    "yearOfConstructionLabel": "Година на производство",
+    "fuelLabel": "Гориво"
   },
   "Common": {
     "loading": "Зареждане...",

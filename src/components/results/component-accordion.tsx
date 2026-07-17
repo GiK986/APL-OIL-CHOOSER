@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
 import { AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
 import { ProductUseSection } from "./product-use-section";
 import { groupProductsByUse } from "./group-products-by-use";
 import type { Capacity, RecommendationComponent } from "@/lib/olyslager/types";
@@ -24,16 +23,16 @@ export function ComponentAccordion({ component }: { component: RecommendationCom
     <AccordionItem value={component.id}>
       <AccordionTrigger>
         <span className="flex flex-col items-start gap-1">
-          <span className="flex items-center gap-2">
+          <span className="uppercase">
             {component.componentName}
             {component.componentCode && (
-              <Badge variant="outline" className="font-normal text-muted-foreground">
-                {component.componentCode}
-              </Badge>
+              <span className="text-muted-foreground"> | {component.componentCode}</span>
             )}
           </span>
           {capacitiesSummary && (
-            <span className="text-xs font-normal text-muted-foreground">{capacitiesSummary}</span>
+            <span className="text-sm font-normal normal-case text-muted-foreground">
+              {t("capacitySpecLabel")}: {capacitiesSummary}
+            </span>
           )}
         </span>
       </AccordionTrigger>

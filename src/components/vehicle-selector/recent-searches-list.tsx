@@ -18,7 +18,10 @@ export function RecentSearchesList({ entries, onSelect }: RecentSearchesListProp
       <p className="text-xs font-medium text-muted-foreground">{t("recentSearchesLabel")}</p>
       <ul className="flex flex-col gap-1">
         {entries.map((entry) => (
-          <li key={entry.typeId}>
+          <li
+            key={entry.typeId}
+            className="not-last:border-b not-last:border-border not-last:pb-2"
+          >
             <button
               type="button"
               onClick={() => onSelect(entry)}
