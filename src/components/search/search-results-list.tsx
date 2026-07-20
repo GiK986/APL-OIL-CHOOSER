@@ -90,11 +90,13 @@ export function SearchResultsList({ results, onSelect, query = "" }: SearchResul
                     {result.yearStart}
                     {result.yearEnd ? `–${result.yearEnd}` : "+"}
                   </dd>
-                  {result.powerHp && (
+                  {(result.powerHp || result.powerKw) && (
                     <>
                       <dt className="text-muted-foreground">{t("powerLabel")}</dt>
                       <dd>
-                        {result.powerHp} HP / {result.powerKw} kW
+                        {result.powerHp && `${result.powerHp} HP`}
+                        {result.powerHp && result.powerKw && " / "}
+                        {result.powerKw && `${result.powerKw} kW`}
                       </dd>
                     </>
                   )}
