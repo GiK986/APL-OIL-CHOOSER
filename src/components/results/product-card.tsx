@@ -47,7 +47,11 @@ export function ProductCard({ product }: { product: ProductRecommendation }) {
         />
       </div>
       <CardContent>
-        <p className="text-sm font-medium">{product.productName}</p>
+        {/* Fixed to exactly 2 lines so every card reserves the same space
+            regardless of name length — CSS grid only equalizes heights
+            within a row, so a short name in its own row (no taller sibling
+            to stretch against) would otherwise end up visibly shorter. */}
+        <p className="line-clamp-2 h-10 text-sm font-medium">{product.productName}</p>
       </CardContent>
     </Card>
   );
