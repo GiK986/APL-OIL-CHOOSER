@@ -57,6 +57,7 @@ export function SearchBox({ onSelectResult }: SearchBoxProps) {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder={t("placeholder")}
+        className="bg-card"
       />
       {debouncedQuery && loading && (
         <p className="absolute z-10 mt-1 w-full rounded-[3px] border border-border bg-card p-3 text-center text-sm text-muted-foreground shadow-md">
@@ -65,7 +66,7 @@ export function SearchBox({ onSelectResult }: SearchBoxProps) {
       )}
       {debouncedQuery && !loading && (
         <div className="absolute z-10 mt-1 max-h-96 w-full overflow-y-auto rounded-[3px] border border-border bg-card shadow-md">
-          <SearchResultsList results={results} onSelect={handleSelect} />
+          <SearchResultsList results={results} onSelect={handleSelect} query={debouncedQuery} />
         </div>
       )}
     </div>
