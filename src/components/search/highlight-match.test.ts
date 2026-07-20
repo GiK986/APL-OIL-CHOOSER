@@ -50,3 +50,28 @@ test("multiple non-overlapping occurrences all match", () => {
     { text: "A6", matched: true },
   ]);
 });
+
+test("multi-word query highlights each word independently", () => {
+  assert.deepEqual(splitOnMatch("Audi A6 2.0 quattro", "A6 2.0"), [
+    { text: "Audi ", matched: false },
+    { text: "A6", matched: true },
+    { text: " ", matched: false },
+    { text: "2.0", matched: true },
+    { text: " quattro", matched: false },
+  ]);
+});
+
+test("multi-word query only highlights the words that actually appear", () => {
+  assert.deepEqual(splitOnMatch("Audi A6", "A6 2.0 130"), [
+    { text: "Audi ", matched: false },
+    { text: "A6", matched: true },
+  ]);
+});
+
+test("duplicate words in the query are only searched once", () => {
+  assert.deepEqual(splitOnMatch("A6 A6", "A6 A6"), [
+    { text: "A6", matched: true },
+    { text: " ", matched: false },
+    { text: "A6", matched: true },
+  ]);
+});

@@ -38,16 +38,18 @@ export function SearchResultsList({ results, onSelect, query = "" }: SearchResul
       {results.map((result) => (
         <li key={result.typeId}>
           <button type="button" className="w-full text-left" onClick={() => onSelect(result)}>
-            <Card className="flex flex-row items-start gap-3 px-4 py-3 transition-colors hover:bg-muted">
-              {result.modelImageUrlMedium && (
-                <Image
-                  src={result.modelImageUrlMedium}
-                  alt=""
-                  width={96}
-                  height={64}
-                  className="h-16 w-24 shrink-0 object-contain"
-                />
-              )}
+            <Card className="flex flex-row items-center gap-3 px-4 py-3 transition-colors hover:bg-muted">
+              <div className="h-16 w-24 shrink-0">
+                {result.modelImageUrlMedium && (
+                  <Image
+                    src={result.modelImageUrlMedium}
+                    alt=""
+                    width={96}
+                    height={64}
+                    className="h-16 w-24 object-contain"
+                  />
+                )}
+              </div>
               <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                 <div>
                   <p className="truncate font-medium">
