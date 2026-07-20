@@ -41,7 +41,13 @@
   },
   "Search": {
     "placeholder": "Search by model, e.g. A6 2.0 130",
-    "noResults": "No matches — try a different search"
+    "noResults": "No matches — try a different search",
+    "engineCodeLabel": "Engine code",
+    "driveTypeLabel": "Drive type",
+    "yearOfProductionLabel": "Year of production",
+    "powerLabel": "Power",
+    "fuelLabel": "Fuel",
+    "capacityLabel": "Capacity"
   },
   "Results": {
     "changeInterval": "Change interval",
