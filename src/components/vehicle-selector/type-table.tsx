@@ -130,7 +130,8 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
   const fuelOptions = extractDistinctValues(data, "fuel");
   const driveTypeOptions = extractDistinctValues(data, "driveType");
   const filteredTypes = data.filter(
-    (type) => matchesNameFilter(type.typeName, typeNameQuery) && matchesTypeFilters(type, filters),
+    (type) =>
+      matchesNameFilter([type.typeName], typeNameQuery) && matchesTypeFilters(type, filters),
   );
   const filtersActive = hasActiveTypeFilters(filters) || typeNameQuery.trim() !== "";
 

@@ -53,7 +53,9 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
     return <p className="text-sm text-muted-foreground">{t("emptyModels")}</p>;
   }
 
-  const filtered = sortByAppOrder(data).filter((model) => matchesNameFilter(model.modelName, query));
+  const filtered = sortByAppOrder(data).filter((model) =>
+    matchesNameFilter([model.modelName, model.code], query),
+  );
 
   return (
     <FilterableStepLayout

@@ -62,7 +62,7 @@ export function MakeGrid({
     return <p className="text-sm text-muted-foreground">{t("emptyMakes")}</p>;
   }
 
-  const filtered = sortByAppOrder(data).filter((make) => matchesNameFilter(make.makeName, query));
+  const filtered = sortByAppOrder(data).filter((make) => matchesNameFilter([make.makeName], query));
   const categoryRecentSearches = recentSearches.filter((entry) => entry.categoryId === categoryId);
 
   return (
