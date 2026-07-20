@@ -42,6 +42,7 @@
   "Search": {
     "placeholder": "Търсене по модел, напр. A6 2.0 130",
     "noResults": "Няма намерени резултати — опитайте друго търсене",
+    "clearLabel": "Изчисти търсенето",
     "engineCodeLabel": "Код на двигателя",
     "driveTypeLabel": "Задвижване",
     "yearOfProductionLabel": "Година на производство",

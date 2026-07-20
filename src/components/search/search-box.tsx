@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { X } from "lucide-react";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { Input } from "@/components/ui/input";
 import { SearchResultsList } from "./search-results-list";
@@ -51,14 +52,29 @@ export function SearchBox({ onSelectResult }: SearchBoxProps) {
     onSelectResult(result);
   }
 
+  function clearQuery() {
+    setQuery("");
+    setResults([]);
+  }
+
   return (
     <div className="relative w-full">
       <Input
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder={t("placeholder")}
-        className="bg-card"
+        className="bg-card pr-8"
       />
+      {query && (
+        <button
+          type="button"
+          onClick={clearQuery}
+          aria-label={t("clearLabel")}
+          className="absolute top-1/2 right-2.5 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+        >
+          <X className="size-3.5" />
+        </button>
+      )}
       {debouncedQuery && loading && (
         <p className="absolute z-10 mt-1 w-full rounded-[3px] border border-border bg-card p-3 text-center text-sm text-muted-foreground shadow-md">
           …
