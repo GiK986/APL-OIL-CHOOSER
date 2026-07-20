@@ -7,10 +7,10 @@ import { useOlyslagerList } from "@/hooks/use-olyslager-list";
 import { matchesNameFilter } from "./name-filter";
 import { sortByAppOrder } from "./sort-by-app-order";
 import { FilterableStepLayout } from "./filterable-step-layout";
+import { NameFilterInput } from "./name-filter-input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { Model } from "@/lib/olyslager/types";
 
 interface ModelGridProps {
@@ -102,15 +102,7 @@ export function ModelGrid({ makeId, onSelect }: ModelGridProps) {
       }
       filters={
         <div className="flex flex-col gap-2 rounded-[3px] border border-border bg-card p-3">
-          <label className="text-xs font-medium text-muted-foreground" htmlFor="model-name-filter">
-            {t("filterByName")}
-          </label>
-          <Input
-            id="model-name-filter"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("filterByName")}
-          />
+          <NameFilterInput id="model-name-filter" value={query} onChange={setQuery} />
         </div>
       }
     />

@@ -24,6 +24,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FilterableStepLayout } from "./filterable-step-layout";
+import { NameFilterInput } from "./name-filter-input";
 import { matchesNameFilter } from "./name-filter";
 import {
   EMPTY_TYPE_FILTERS,
@@ -344,15 +345,7 @@ export function TypeTable({ modelId, onSelect }: TypeTableProps) {
       filters={
         <div className="flex flex-col gap-3 rounded-[3px] border border-border bg-card p-3">
           <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-muted-foreground" htmlFor="type-name-filter">
-              {t("filterByName")}
-            </label>
-            <Input
-              id="type-name-filter"
-              value={typeNameQuery}
-              onChange={(e) => setTypeNameQuery(e.target.value)}
-              placeholder={t("filterByName")}
-            />
+            <NameFilterInput id="type-name-filter" value={typeNameQuery} onChange={setTypeNameQuery} />
           </div>
           <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-muted-foreground" htmlFor="type-fuel-filter">
