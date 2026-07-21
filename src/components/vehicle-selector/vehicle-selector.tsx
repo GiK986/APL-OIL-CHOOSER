@@ -201,13 +201,19 @@ export function VehicleSelector() {
       typeId: null,
     });
   }
-  function jumpToType(id: number, label: string) {
-    setCategory(null);
+  function jumpToType(id: number, label: string, categoryId: number | null = null) {
+    const resolvedCategory = categoryId != null ? (categories?.find((c) => c.id === categoryId) ?? null) : null;
+    setCategory(resolvedCategory);
     setMake(null);
     setModel(null);
     setTypeId(id);
     setTypeLabel(label);
-    pushSelection({ categoryId: null, makeId: null, modelId: null, typeId: id });
+    pushSelection({
+      categoryId: resolvedCategory?.id ?? categoryId,
+      makeId: null,
+      modelId: null,
+      typeId: id,
+    });
   }
 
   function selectSearchResult(result: SearchResult) {
@@ -303,7 +309,7 @@ export function VehicleSelector() {
           categoryId={category.id}
           onSelect={selectMake}
           recentSearches={recentSearches}
-          onSelectRecentSearch={(entry) => jumpToType(entry.typeId, entry.typeName)}
+          onSelectRecentSearch={(entry) => jumpToType(entry.typeId, entry.typeName, entry.categoryId)}
         />
       )}
       {step === "model" && make && !resolvingSelection && (
