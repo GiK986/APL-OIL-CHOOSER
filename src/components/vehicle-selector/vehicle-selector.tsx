@@ -217,7 +217,12 @@ export function VehicleSelector() {
   }
 
   function selectSearchResult(result: SearchResult) {
-    jumpToType(result.typeId, result.type);
+    // SearchResult only carries the category's display name (e.g. "Cars"), not
+    // its numeric id — the underlying Olyslager taxonomy data is always in
+    // English regardless of UI locale, so matching against categoryName here
+    // is safe (same source, same canonical names as the categories list).
+    const categoryId = categories?.find((c) => c.categoryName === result.category)?.id ?? null;
+    jumpToType(result.typeId, result.type, categoryId);
   }
 
   const handleResultsLoaded = useCallback(
