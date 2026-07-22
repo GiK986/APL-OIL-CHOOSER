@@ -1,9 +1,11 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { Open_Sans } from "next/font/google";
 import { routing } from "@/i18n/routing";
+import { RoutePersistence } from "@/components/route-persistence";
 import "../globals.css";
 
 const openSans = Open_Sans({
@@ -36,7 +38,12 @@ export default async function LocaleLayout({
       className={`${openSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <Suspense fallback={null}>
+            <RoutePersistence />
+          </Suspense>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
