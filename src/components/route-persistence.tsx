@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { usePathname } from "@/i18n/navigation";
-import { buildStorageKey, writePersistedPath } from "@/lib/route-persistence";
+import { buildStorageKey, hasAppState, writePersistedPath } from "@/lib/route-persistence";
 
 // TM1/Next Catalogue embeds this app in an iframe at a fixed entry URL and
 // recreates that iframe (discarding in-app navigation) whenever it refreshes
@@ -20,18 +20,18 @@ import { buildStorageKey, writePersistedPath } from "@/lib/route-persistence";
 export function RoutePersistence() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // Skips the very first write. This component lives in the root layout and
-  // mounts once per real page load (never remounted by client-side nav), so
-  // that first render is always the raw entry URL — which carries TM1's
-  // one-shot `token` query param. Only real in-app navigations get recorded,
-  // so a later restore can never replay a possibly-expired token.
-  const isBootRender = useRef(true);
 
   useEffect(() => {
-    if (isBootRender.current) {
-      isBootRender.current = false;
-      return;
-    }
+    // Only ever persist a URL that carries real in-app state. This is what
+    // keeps the raw entry URL — which carries TM1's one-shot `token` query
+    // param — out of sessionStorage (a bare boot URL never has app state),
+    // and it holds regardless of render count or React Strict Mode's
+    // double-invoked effects in dev (unlike a "skip the first render" ref
+    // guard, which a double-invoke defeats). It's also what
+    // RouteRestoreGate's decideRestore relies on: a persisted value is
+    // always one actually worth restoring, never a "nothing yet" value that
+    // would otherwise loop the gate on its spinner forever.
+    if (!hasAppState(searchParams)) return;
     const key = buildStorageKey(searchParams.get("tid"));
     const query = searchParams.toString();
     const current = query ? `${pathname}?${query}` : pathname;

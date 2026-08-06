@@ -1,7 +1,7 @@
 // src/lib/route-persistence.test.ts
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildStorageKey, hasAppState, readPersistedPath, writePersistedPath } from "./route-persistence.ts";
+import { buildStorageKey, decideRestore, hasAppState, readPersistedPath, writePersistedPath } from "./route-persistence.ts";
 
 function installFakeSessionStorage() {
   const store = new Map<string, string>();
@@ -83,4 +83,29 @@ test("hasAppState is true when the URL carries app state alongside TM1 params", 
 
 test("hasAppState is true when sid is present (no longer a recognized TM1 control param)", () => {
   assert.equal(hasAppState(new URLSearchParams("lid=4&tid=task-1&sid=abc")), true);
+});
+
+test("decideRestore is ready when the current URL already has app state", () => {
+  const result = decideRestore("/", new URLSearchParams("tid=x&categoryId=1"), "/?tid=x&categoryId=2");
+  assert.deepEqual(result, { type: "ready" });
+});
+
+test("decideRestore is ready when already off the entry path", () => {
+  const result = decideRestore("/vehicle", new URLSearchParams(""), "/?tid=x&categoryId=1");
+  assert.deepEqual(result, { type: "ready" });
+});
+
+test("decideRestore replaces when a saved path carries real app state", () => {
+  const result = decideRestore("/", new URLSearchParams("tid=x"), "/?tid=x&categoryId=1");
+  assert.deepEqual(result, { type: "replace", path: "/?tid=x&categoryId=1" });
+});
+
+test("decideRestore is ready — not a replace loop — when the saved path has no real app state", () => {
+  const result = decideRestore("/", new URLSearchParams("tid=x"), "/?tid=x");
+  assert.deepEqual(result, { type: "ready" });
+});
+
+test("decideRestore is ready when nothing is saved", () => {
+  const result = decideRestore("/", new URLSearchParams("tid=x"), null);
+  assert.deepEqual(result, { type: "ready" });
 });
