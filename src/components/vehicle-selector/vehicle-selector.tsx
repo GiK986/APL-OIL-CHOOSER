@@ -70,6 +70,12 @@ export function VehicleSelector() {
   function pushSelection(next: Selection) {
     setHasInteracted(true);
     const query: Record<string, string> = {};
+    // Carry `tid` forward on every navigation — this is the only place that
+    // builds URLs for in-app navigation, and route-persistence.tsx namespaces
+    // its sessionStorage key by tid. Dropping it here would silently fall
+    // back to the shared (non-per-tab) key after the first selection.
+    const tid = searchParams.get("tid");
+    if (tid) query.tid = tid;
     if (next.categoryId != null) query.categoryId = String(next.categoryId);
     if (next.makeId != null) query.makeId = String(next.makeId);
     if (next.modelId != null) query.modelId = String(next.modelId);
