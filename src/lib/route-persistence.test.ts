@@ -68,9 +68,19 @@ test("hasAppState is false for a bare entry URL with no params", () => {
 });
 
 test("hasAppState is false when only TM1's own control params are present", () => {
-  assert.equal(hasAppState(new URLSearchParams("lid=4&sid=abc&tid=task-1")), false);
+  assert.equal(
+    hasAppState(new URLSearchParams("lid=4&tid=task-1&token=Bearer+eyJhbGciOi")),
+    false,
+  );
 });
 
 test("hasAppState is true when the URL carries app state alongside TM1 params", () => {
-  assert.equal(hasAppState(new URLSearchParams("lid=4&tid=task-1&categoryId=1")), true);
+  assert.equal(
+    hasAppState(new URLSearchParams("lid=4&tid=task-1&token=Bearer+eyJhbGciOi&categoryId=1")),
+    true,
+  );
+});
+
+test("hasAppState is true when sid is present (no longer a recognized TM1 control param)", () => {
+  assert.equal(hasAppState(new URLSearchParams("lid=4&tid=task-1&sid=abc")), true);
 });

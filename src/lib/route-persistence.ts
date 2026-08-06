@@ -1,8 +1,11 @@
 const STORAGE_KEY = "apl-oil-chooser:last-path";
 
-// TM1 passes these on the entry URL to control locale/session/tab identity —
-// none of them are this app's own navigation state (see src/proxy.ts for `lid`).
-const TM1_CONTROL_PARAMS = new Set(["lid", "sid", "tid"]);
+// TM1 passes these on the entry URL to control locale/tab identity and
+// middleware auth — none of them are this app's own navigation state (see
+// src/proxy.ts for `lid`). `sid` is no longer sent — auth now happens
+// centrally in a Traefik middleware via `token` — and is intentionally left
+// out of this set.
+const TM1_CONTROL_PARAMS = new Set(["lid", "tid", "token"]);
 
 export function buildStorageKey(tid: string | null): string {
   return tid ? `${STORAGE_KEY}:${tid}` : STORAGE_KEY;
