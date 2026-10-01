@@ -2,7 +2,7 @@
 // <iframe> and listens for window.postMessage calls on the parent. This
 // origin must be the exact target window origin (protocol + host, no path)
 // or the browser silently drops the message.
-export const TM1_ORIGIN = "https://tm1.carparts-cat.com";
+export const TM1_ORIGIN = "https://tm1.carparts-cat.com, https://tm-next.dvse.de";
 
 export function buildOpenArticleListMessage(productCode: string): string {
   return JSON.stringify({
