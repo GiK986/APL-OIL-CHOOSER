@@ -51,7 +51,7 @@ export function ProductCard({ product, brand }: { product: ProductRecommendation
   // clickable) outside that embed.
   if (isEmbedded && productCode) {
     return (
-      <button type="button" className="w-full text-left" onClick={() => openArticleList(productCode)}>
+      <button type="button" className="w-full text-left" onClick={() => openArticleList(productCode, brand)}>
         {card}
       </button>
     );

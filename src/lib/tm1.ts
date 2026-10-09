@@ -1,3 +1,5 @@
+import type { Brand } from "@/lib/olyslager/brand";
+
 // TM1 / Next Catalogue (TecAlliance/TecDoc) embeds this app as a cross-origin
 // <iframe> and listens for window.postMessage calls on the parent. postMessage
 // takes exactly one target origin (protocol + host, no path), so we resolve the
@@ -8,16 +10,22 @@ export const TM1_ORIGINS = [
 ] as const;
 
 // TM1's SearchFilters bit flags (from its bundle): 1 = SupplierArticleNo, shown
-// in TM1's own search UI as "Manufacturer Part Number". Without a filter TM1
-// searches every number type (OE, trade, EAN...), so the clicked product isn't
-// the first hit. Not 15: that's the OR of 1|2|4|8 (adds OE/utility/replacement
-// numbers) and TM1 returns an unfiltered result for it.
-const SEARCH_FILTER_MANUFACTURER_PART_NUMBER = 1;
+// in TM1's own search UI as "Manufacturer Part Number". Eurol codes (e.g.
+// E100016) are also other manufacturers' part numbers, so an unfiltered search
+// buries the Eurol article; filtering by part number fixes that. Fuchs codes
+// (CP…) only match as TM1 utility numbers and filtering by those (4) finds
+// nothing, so Fuchs is sent without a filter — TM1's default works for it.
+// Never 15: that's 1|2|4|8 and TM1 returns an unfiltered result for it.
+const SEARCH_FILTER_BY_BRAND: Record<Brand, number | undefined> = {
+  fuchs: undefined,
+  eurol: 1,
+};
 
-export function buildOpenArticleListMessage(productCode: string): string {
+export function buildOpenArticleListMessage(productCode: string, brand: Brand): string {
+  const searchFilter = SEARCH_FILTER_BY_BRAND[brand];
   return JSON.stringify({
     openArticleList: {
-      direct: { query: productCode, searchFilter: SEARCH_FILTER_MANUFACTURER_PART_NUMBER },
+      direct: searchFilter === undefined ? { query: productCode } : { query: productCode, searchFilter },
       inModal: true,
       useNewModal: true,
     },
@@ -41,8 +49,8 @@ function getParentOrigin(): string | null {
   }
 }
 
-export function openArticleList(productCode: string): void {
+export function openArticleList(productCode: string, brand: Brand): void {
   const origin = getParentOrigin();
   if (!origin || !(TM1_ORIGINS as readonly string[]).includes(origin)) return;
-  window.parent.postMessage(buildOpenArticleListMessage(productCode), origin);
+  window.parent.postMessage(buildOpenArticleListMessage(productCode, brand), origin);
 }
