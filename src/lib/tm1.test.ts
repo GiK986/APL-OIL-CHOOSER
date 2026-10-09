@@ -10,7 +10,7 @@ test("builds the exact TM1 openArticleList payload shape", () => {
   const message = buildOpenArticleListMessage("CP1003290");
   assert.deepEqual(JSON.parse(message), {
     openArticleList: {
-      direct: { query: "CP1003290" },
+      direct: { query: "CP1003290", searchFilter: 1 },
       inModal: true,
       useNewModal: true,
     },

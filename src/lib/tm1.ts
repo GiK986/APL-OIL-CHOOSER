@@ -7,10 +7,17 @@ export const TM1_ORIGINS = [
   "https://tm-next.dvse.de",
 ] as const;
 
+// TM1's SearchFilters bit flags (from its bundle): 1 = SupplierArticleNo, shown
+// in TM1's own search UI as "Manufacturer Part Number". Without a filter TM1
+// searches every number type (OE, trade, EAN...), so the clicked product isn't
+// the first hit. Not 15: that's the OR of 1|2|4|8 (adds OE/utility/replacement
+// numbers) and TM1 returns an unfiltered result for it.
+const SEARCH_FILTER_MANUFACTURER_PART_NUMBER = 1;
+
 export function buildOpenArticleListMessage(productCode: string): string {
   return JSON.stringify({
     openArticleList: {
-      direct: { query: productCode },
+      direct: { query: productCode, searchFilter: SEARCH_FILTER_MANUFACTURER_PART_NUMBER },
       inModal: true,
       useNewModal: true,
     },
