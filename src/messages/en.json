@@ -58,7 +58,8 @@
     "modelLabel": "Model",
     "typeLabel": "Type",
     "yearOfConstructionLabel": "Year of construction",
-    "fuelLabel": "Fuel"
+    "fuelLabel": "Fuel",
+    "brandSwitchLabel": "Product brand"
   },
   "Common": {
     "loading": "Loading...",

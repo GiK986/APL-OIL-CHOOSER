@@ -58,7 +58,8 @@
     "modelLabel": "Модел",
     "typeLabel": "Тип",
     "yearOfConstructionLabel": "Година на производство",
-    "fuelLabel": "Гориво"
+    "fuelLabel": "Гориво",
+    "brandSwitchLabel": "Марка продукти"
   },
   "Common": {
     "loading": "Зареждане...",
