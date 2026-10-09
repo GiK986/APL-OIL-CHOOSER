@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import { olyslager, OlyslagerApiError } from "@/lib/olyslager/client";
+import { BRANDS, DEFAULT_BRAND, parseBrand } from "@/lib/olyslager/brand";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: { params: Promise<{ typeId: string }> },
 ) {
   const { typeId: typeIdParam } = await params;
@@ -11,8 +12,15 @@ export async function GET(
     return NextResponse.json({ error: "typeId must be a positive integer" }, { status: 400 });
   }
 
+  // Absent → Fuchs, so pre-existing callers keep working; present but unknown → 400.
+  const brandParam = new URL(request.url).searchParams.get("brand");
+  const brand = brandParam === null ? DEFAULT_BRAND : parseBrand(brandParam);
+  if (!brand) {
+    return NextResponse.json({ error: `brand must be one of: ${BRANDS.join(", ")}` }, { status: 400 });
+  }
+
   try {
-    const recommendation = await olyslager.getRecommendations(typeId);
+    const recommendation = await olyslager.getRecommendations(typeId, brand);
     return NextResponse.json(recommendation);
   } catch (err) {
     if (err instanceof OlyslagerApiError) {
