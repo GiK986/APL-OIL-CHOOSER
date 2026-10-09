@@ -9,23 +9,23 @@ export const TM1_ORIGINS = [
   "https://tm-next.dvse.de",
 ] as const;
 
-// TM1's SearchFilters bit flags (from its bundle): 1 = SupplierArticleNo, shown
-// in TM1's own search UI as "Manufacturer Part Number". Eurol codes (e.g.
-// E100016) are also other manufacturers' part numbers, so an unfiltered search
-// buries the Eurol article; filtering by part number fixes that. Fuchs codes
-// (CP…) only match as TM1 utility numbers and filtering by those (4) finds
-// nothing, so Fuchs is sent without a filter — TM1's default works for it.
+// TM1's SearchFilters bit flags (from its bundle). An unfiltered search matches
+// every number type (OE, trade, EAN...), so the clicked product isn't the
+// first hit; each brand's codes live in a different number field:
+// - Eurol (E100016…): 1 = SupplierArticleNo, "Manufacturer Part Number" in
+//   TM1's UI. Eurol codes also collide with other makers' part numbers.
+// - Fuchs (CP1003290…): 4 = UtilityNo — Auto Plus lists Fuchs CP codes as
+//   utility numbers.
 // Never 15: that's 1|2|4|8 and TM1 returns an unfiltered result for it.
-const SEARCH_FILTER_BY_BRAND: Record<Brand, number | undefined> = {
-  fuchs: undefined,
+const SEARCH_FILTER_BY_BRAND: Record<Brand, number> = {
+  fuchs: 4,
   eurol: 1,
 };
 
 export function buildOpenArticleListMessage(productCode: string, brand: Brand): string {
-  const searchFilter = SEARCH_FILTER_BY_BRAND[brand];
   return JSON.stringify({
     openArticleList: {
-      direct: searchFilter === undefined ? { query: productCode } : { query: productCode, searchFilter },
+      direct: { query: productCode, searchFilter: SEARCH_FILTER_BY_BRAND[brand] },
       inModal: true,
       useNewModal: true,
     },

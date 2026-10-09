@@ -6,11 +6,11 @@ import {
   openArticleList,
 } from "./tm1.ts";
 
-test("builds the exact TM1 openArticleList payload shape for Fuchs (no searchFilter)", () => {
+test("Fuchs searches by utility number (searchFilter 4)", () => {
   const message = buildOpenArticleListMessage("CP1003290", "fuchs");
   assert.deepEqual(JSON.parse(message), {
     openArticleList: {
-      direct: { query: "CP1003290" },
+      direct: { query: "CP1003290", searchFilter: 4 },
       inModal: true,
       useNewModal: true,
     },
