@@ -3,6 +3,7 @@ import { AccordionItem, AccordionTrigger, AccordionContent } from "@/components/
 import { ProductUseSection } from "./product-use-section";
 import { groupProductsByUse } from "./group-products-by-use";
 import type { Capacity, RecommendationComponent } from "@/lib/olyslager/types";
+import type { Brand } from "@/lib/olyslager/brand";
 
 function formatCapacitiesSummary(capacities: Capacity[]): string {
   return capacities
@@ -13,7 +14,7 @@ function formatCapacitiesSummary(capacities: Capacity[]): string {
     .join(" | ");
 }
 
-export function ComponentAccordion({ component }: { component: RecommendationComponent }) {
+export function ComponentAccordion({ component, brand }: { component: RecommendationComponent; brand: Brand }) {
   const t = useTranslations("Results");
   const hasContent = component.productRecommendations.length > 0 || component.capacities.length > 0;
   const capacitiesSummary = formatCapacitiesSummary(component.capacities);
@@ -38,7 +39,7 @@ export function ComponentAccordion({ component }: { component: RecommendationCom
       </AccordionTrigger>
       <AccordionContent>
         {hasContent ? (
-          groups.map((group) => <ProductUseSection key={group.useName} group={group} />)
+          groups.map((group) => <ProductUseSection key={group.useName} group={group} brand={brand} />)
         ) : (
           <p className="text-sm text-muted-foreground">{t("noComponents")}</p>
         )}

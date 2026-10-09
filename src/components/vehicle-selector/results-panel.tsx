@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import type { Recommendation } from "@/lib/olyslager/types";
+import { DEFAULT_BRAND } from "@/lib/olyslager/brand";
 
 interface ResultsPanelProps {
   typeId: number;
@@ -73,7 +74,7 @@ export function ResultsPanel({ typeId, onLoaded }: ResultsPanelProps) {
       <div className="min-w-0 flex-1">
         <Accordion multiple defaultValue={[data.components[0].id]}>
           {data.components.map((component) => (
-            <ComponentAccordion key={component.id} component={component} />
+            <ComponentAccordion key={component.id} component={component} brand={DEFAULT_BRAND} />
           ))}
         </Accordion>
       </div>

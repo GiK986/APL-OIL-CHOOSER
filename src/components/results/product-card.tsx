@@ -8,21 +8,11 @@ import { useIsEmbedded } from "@/hooks/use-is-embedded";
 import { openArticleList } from "@/lib/tm1";
 import { cn } from "@/lib/utils";
 import type { ProductRecommendation } from "@/lib/olyslager/types";
+import type { Brand } from "@/lib/olyslager/brand";
+import { getFallbackImage, initialImageSrc } from "./product-image";
 
-const FALLBACK_IMAGE = "/products/fuchs-no-image.jpg";
-
-// Local product photos are named after productCode (e.g. "/products/CP1003290.jpg").
-// productImage from the API is always empty in this dataset today, but takes
-// priority if a future dataset populates it. If neither exists — or the guessed
-// local file 404s — onError below swaps to the Fuchs placeholder.
-function initialImageSrc(product: ProductRecommendation): string {
-  if (product.productImage) return product.productImage;
-  if (product.productCode) return `/products/${product.productCode}.jpg`;
-  return FALLBACK_IMAGE;
-}
-
-export function ProductCard({ product }: { product: ProductRecommendation }) {
-  const [src, setSrc] = useState(() => initialImageSrc(product));
+export function ProductCard({ product, brand }: { product: ProductRecommendation; brand: Brand }) {
+  const [src, setSrc] = useState(() => initialImageSrc(product, brand));
   const isEmbedded = useIsEmbedded();
   const { productCode } = product;
 
@@ -43,7 +33,7 @@ export function ProductCard({ product }: { product: ProductRecommendation }) {
           width={120}
           height={200}
           className="h-48 w-auto object-contain"
-          onError={() => setSrc(FALLBACK_IMAGE)}
+          onError={() => setSrc(getFallbackImage(brand))}
         />
       </div>
       <CardContent>

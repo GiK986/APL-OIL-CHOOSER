@@ -1,8 +1,9 @@
 import { useTranslations } from "next-intl";
 import { ProductGrid } from "./product-grid";
 import type { ProductUseGroup } from "./group-products-by-use";
+import type { Brand } from "@/lib/olyslager/brand";
 
-export function ProductUseSection({ group }: { group: ProductUseGroup }) {
+export function ProductUseSection({ group, brand }: { group: ProductUseGroup; brand: Brand }) {
   const t = useTranslations("Results");
   const intervalsSummary = group.intervals
     .map((interval) => `${interval.intervalType} ${interval.intervalName}`)
@@ -16,7 +17,7 @@ export function ProductUseSection({ group }: { group: ProductUseGroup }) {
           {t("changeInterval")}: {intervalsSummary}
         </p>
       )}
-      <ProductGrid products={group.products} />
+      <ProductGrid products={group.products} brand={brand} />
     </div>
   );
 }
