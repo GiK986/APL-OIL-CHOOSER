@@ -12,14 +12,15 @@ export const TM1_ORIGINS = [
 // TM1's SearchFilters bit flags (from its bundle). An unfiltered search matches
 // every number type (OE, trade, EAN...), so the clicked product isn't the
 // first hit; each brand's codes live in a different number field:
-// - Eurol (E100016…): 1 = SupplierArticleNo, "Manufacturer Part Number" in
-//   TM1's UI. Eurol codes also collide with other makers' part numbers.
+// - Eurol (E100016…): 97 = SupplierArticleNoAndTradeReference — SupplierArticleNo
+//   (1, "Manufacturer Part Number" in TM1's UI) | TradeReference_KART (32) |
+//   TradeReference_KARTREF (64).
 // - Fuchs (CP1003290…): 4 = UtilityNo — Auto Plus lists Fuchs CP codes as
 //   utility numbers.
 // Never 15: that's 1|2|4|8 and TM1 returns an unfiltered result for it.
 const SEARCH_FILTER_BY_BRAND: Record<Brand, number> = {
   fuchs: 4,
-  eurol: 1,
+  eurol: 97,
 };
 
 export function buildOpenArticleListMessage(productCode: string, brand: Brand): string {

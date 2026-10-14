@@ -17,11 +17,11 @@ test("Fuchs searches by utility number (searchFilter 4)", () => {
   });
 });
 
-test("Eurol searches by manufacturer part number (searchFilter 1)", () => {
+test("Eurol searches by manufacturer part number + trade references (searchFilter 97)", () => {
   const message = buildOpenArticleListMessage("E100016", "eurol");
   assert.deepEqual(JSON.parse(message), {
     openArticleList: {
-      direct: { query: "E100016", searchFilter: 1 },
+      direct: { query: "E100016", searchFilter: 97 },
       inModal: true,
       useNewModal: true,
     },
