@@ -27,8 +27,8 @@ beforeEach(() => {
   installFakeLocalStorage();
 });
 
-test("defaults to fuchs when nothing is stored", () => {
-  assert.equal(getBrandPreference(), "fuchs");
+test("defaults to eurol when nothing is stored", () => {
+  assert.equal(getBrandPreference(), "eurol");
 });
 
 test("round-trips eurol under the documented key", () => {
@@ -36,22 +36,25 @@ test("round-trips eurol under the documented key", () => {
   assert.equal(localStorage.getItem(BRAND_STORAGE_KEY), "eurol");
   assert.equal(BRAND_STORAGE_KEY, "apl-oil-chooser:brand");
   assert.equal(getBrandPreference(), "eurol");
-  setBrandPreference("fuchs");
-  assert.equal(getBrandPreference(), "fuchs");
 });
 
-test("falls back to fuchs for garbage or differently-cased stored values", () => {
+test("a stored fuchs preference falls back to eurol while fuchs is disabled", () => {
+  localStorage.setItem(BRAND_STORAGE_KEY, "fuchs");
+  assert.equal(getBrandPreference(), "eurol");
+});
+
+test("falls back to eurol for garbage or differently-cased stored values", () => {
   for (const value of ["EUROL", "Eurol", "total", "", '"eurol"']) {
     localStorage.setItem(BRAND_STORAGE_KEY, value);
-    assert.equal(getBrandPreference(), "fuchs", `expected fuchs for ${JSON.stringify(value)}`);
+    assert.equal(getBrandPreference(), "eurol", `expected eurol for ${JSON.stringify(value)}`);
   }
 });
 
-test("falls back to fuchs when getItem throws", () => {
+test("falls back to eurol when getItem throws", () => {
   localStorage.getItem = () => {
     throw new Error("SecurityError");
   };
-  assert.equal(getBrandPreference(), "fuchs");
+  assert.equal(getBrandPreference(), "eurol");
 });
 
 test("swallows setItem errors", () => {
@@ -63,6 +66,6 @@ test("swallows setItem errors", () => {
 
 test("works when localStorage is undefined (server render)", () => {
   delete (globalThis as { localStorage?: Storage }).localStorage;
-  assert.equal(getBrandPreference(), "fuchs");
+  assert.equal(getBrandPreference(), "eurol");
   assert.doesNotThrow(() => setBrandPreference("eurol"));
 });

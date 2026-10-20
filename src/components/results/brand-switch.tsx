@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { BRANDS, type Brand } from "@/lib/olyslager/brand";
+import { ENABLED_BRANDS, type Brand } from "@/lib/olyslager/brand";
 
 // Brand names are proper nouns — deliberately not translated.
 const BRAND_LABELS: Record<Brand, string> = {
@@ -28,7 +28,7 @@ export function BrandSwitch({ value, onChange }: BrandSwitchProps) {
         aria-labelledby="brand-switch-label"
         className="inline-flex gap-1 rounded-lg border border-border p-1"
       >
-        {BRANDS.map((brand) => {
+        {ENABLED_BRANDS.map((brand) => {
           const active = brand === value;
           return (
             <Button

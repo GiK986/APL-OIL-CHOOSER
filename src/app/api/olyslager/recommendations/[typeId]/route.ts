@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { olyslager, OlyslagerApiError } from "@/lib/olyslager/client";
-import { BRANDS, DEFAULT_BRAND, parseBrand } from "@/lib/olyslager/brand";
+import { DEFAULT_BRAND, ENABLED_BRANDS, parseBrand } from "@/lib/olyslager/brand";
 
 export async function GET(
   request: Request,
@@ -12,11 +12,11 @@ export async function GET(
     return NextResponse.json({ error: "typeId must be a positive integer" }, { status: 400 });
   }
 
-  // Absent → Fuchs, so pre-existing callers keep working; present but unknown → 400.
+  // Absent → DEFAULT_BRAND, so pre-existing callers keep working; present but unknown or disabled → 400.
   const brandParam = new URL(request.url).searchParams.get("brand");
   const brand = brandParam === null ? DEFAULT_BRAND : parseBrand(brandParam);
   if (!brand) {
-    return NextResponse.json({ error: `brand must be one of: ${BRANDS.join(", ")}` }, { status: 400 });
+    return NextResponse.json({ error: `brand must be one of: ${ENABLED_BRANDS.join(", ")}` }, { status: 400 });
   }
 
   try {

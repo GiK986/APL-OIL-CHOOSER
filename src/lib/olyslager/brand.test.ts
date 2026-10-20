@@ -1,16 +1,20 @@
 // src/lib/olyslager/brand.test.ts
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { BRANDS, DEFAULT_BRAND, parseBrand } from "./brand.ts";
+import { BRANDS, DEFAULT_BRAND, ENABLED_BRANDS, parseBrand } from "./brand.ts";
 
-test("BRANDS lists fuchs then eurol, and fuchs is the default", () => {
+test("BRANDS lists every configured brand; only eurol is enabled and it is the default", () => {
   assert.deepEqual([...BRANDS], ["fuchs", "eurol"]);
-  assert.equal(DEFAULT_BRAND, "fuchs");
+  assert.deepEqual([...ENABLED_BRANDS], ["eurol"]);
+  assert.equal(DEFAULT_BRAND, "eurol");
 });
 
-test("parseBrand accepts the exact lowercase brand ids", () => {
-  assert.equal(parseBrand("fuchs"), "fuchs");
+test("parseBrand accepts an enabled brand id", () => {
   assert.equal(parseBrand("eurol"), "eurol");
+});
+
+test("parseBrand rejects fuchs while it is disabled", () => {
+  assert.equal(parseBrand("fuchs"), null);
 });
 
 test("parseBrand rejects other casing, unknown ids and non-strings", () => {

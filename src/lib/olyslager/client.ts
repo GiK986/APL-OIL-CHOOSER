@@ -89,10 +89,11 @@ function sortRecommendation(rec: Recommendation): Recommendation {
 }
 
 // Vehicle navigation (categories → makes → models → types, plus free-text
-// search) always runs against the Fuchs dataset. Vehicle ids are shared
-// across our Olyslager datasets, so a Fuchs typeId is valid for every brand's
-// recommendations.
-const NAVIGATION_BRAND: Brand = "fuchs";
+// search) runs against a single dataset. Vehicle ids are shared across our
+// Olyslager datasets, so its typeId is valid for every brand's recommendations.
+// Temporarily Eurol: the Fuchs subscription key returns 401 since 2026-10-20
+// (see ENABLED_BRANDS in ./brand). Switch back to "fuchs" once it works.
+const NAVIGATION_BRAND: Brand = "eurol";
 
 export const olyslager = {
   getCategories: () =>
