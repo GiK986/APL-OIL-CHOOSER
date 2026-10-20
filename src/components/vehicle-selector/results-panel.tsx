@@ -7,6 +7,7 @@ import { useBrandPreference } from "@/hooks/use-brand-preference";
 import { VehicleSidebarCard } from "@/components/results/vehicle-sidebar-card";
 import { ComponentAccordion } from "@/components/results/component-accordion";
 import { BrandSwitch } from "@/components/results/brand-switch";
+import { RecommendationDisclaimer } from "@/components/results/recommendation-disclaimer";
 import { Accordion } from "@/components/ui/accordion";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -79,33 +80,27 @@ function ResultsBody({
     );
   }
 
-  if (data.components.length === 0) {
-    return (
+  return (
+    <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
         <div className="min-w-0 flex-1">
-          <Alert>
-            <AlertDescription>{t("noComponents")}</AlertDescription>
-          </Alert>
+          {data.components.length === 0 ? (
+            <Alert>
+              <AlertDescription>{t("noComponents")}</AlertDescription>
+            </Alert>
+          ) : (
+            <Accordion multiple defaultValue={[data.components[0].id]}>
+              {data.components.map((component) => (
+                <ComponentAccordion key={component.id} component={component} brand={brand} />
+              ))}
+            </Accordion>
+          )}
         </div>
         <aside className="lg:w-80 lg:shrink-0">
           <VehicleSidebarCard vehicle={data} />
         </aside>
       </div>
-    );
-  }
-
-  return (
-    <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-6">
-      <div className="min-w-0 flex-1">
-        <Accordion multiple defaultValue={[data.components[0].id]}>
-          {data.components.map((component) => (
-            <ComponentAccordion key={component.id} component={component} brand={brand} />
-          ))}
-        </Accordion>
-      </div>
-      <aside className="lg:w-80 lg:shrink-0">
-        <VehicleSidebarCard vehicle={data} />
-      </aside>
+      <RecommendationDisclaimer html={data.disclaimer} />
     </div>
   );
 }

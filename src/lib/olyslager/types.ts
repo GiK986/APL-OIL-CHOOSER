@@ -122,6 +122,8 @@ export interface Recommendation {
   makeImageUrlMedium: string | null;
   makeImageUrlLarge: string | null;
   components: RecommendationComponent[];
+  /** Olyslager copyright/liability notice, as an HTML fragment (contains an <a>). */
+  disclaimer: string | null;
 }
 
 export interface SearchFacetValue {
