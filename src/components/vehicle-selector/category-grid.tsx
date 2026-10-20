@@ -13,7 +13,9 @@ interface CategoryGridProps {
 export function CategoryGrid({ categories, selectedCategoryId, onSelect }: CategoryGridProps) {
   const sorted = sortByAppOrder(categories);
   return (
-    <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
+    // From lg up every category shares a single row (auto-cols-fr), however
+    // many the dataset returns — Eurol has 9, Fuchs had 6.
+    <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-flow-col lg:grid-cols-none lg:auto-cols-fr">
       {sorted.map((category) => {
         const Icon = CATEGORY_ICONS[category.id] ?? DEFAULT_CATEGORY_ICON;
         const selected = category.id === selectedCategoryId;
@@ -23,7 +25,7 @@ export function CategoryGrid({ categories, selectedCategoryId, onSelect }: Categ
             type="button"
             aria-pressed={selected}
             onClick={() => onSelect(category)}
-            className={`flex flex-col items-center gap-2 rounded-[3px] border px-3 py-4 text-center transition-colors hover:border-primary ${
+            className={`flex min-w-0 flex-col items-center gap-1.5 rounded-[3px] border px-2 py-3 text-center transition-colors hover:border-primary ${
               selected ? "border-primary bg-primary/5" : "border-border bg-card"
             }`}
           >
